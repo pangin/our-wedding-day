@@ -1,0 +1,7 @@
+project_id = "our-wedding-day"
+
+[functions.upsert-comment]
+verify_jwt = true
+
+[functions.admin-comments]
+verify_jwt = true
