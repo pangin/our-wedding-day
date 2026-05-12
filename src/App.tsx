@@ -28,7 +28,7 @@ const sections = [
   { id: 'guestbook', label: '방명록' },
 ];
 
-type InvitationState = 'ready' | 'opened';
+type InvitationState = 'ready' | 'opened' | 'replaying';
 type MotionStyle = CSSProperties & Record<`--${string}`, string>;
 
 function clamp01(value: number) {
@@ -137,8 +137,10 @@ export function App() {
         const nextProgress = clamp01(-rect.top / scrollable);
         setIntroProgress(nextProgress);
 
-        if (nextProgress >= 0.985) {
+        if (invitationState === 'ready' && nextProgress >= 0.985) {
           setInvitationState('opened');
+        } else if (invitationState === 'replaying' && window.scrollY <= 1) {
+          setInvitationState('ready');
         }
       });
     };
@@ -180,18 +182,15 @@ export function App() {
 
   function replayInvitation() {
     window.history.replaceState(null, '', window.location.pathname + window.location.search);
-    const root = document.documentElement;
-    const previousScrollBehavior = root.style.scrollBehavior;
 
-    root.style.scrollBehavior = 'auto';
-    setInvitationState('ready');
-    setIntroProgress(0);
-    window.scrollTo(0, 0);
-
-    window.requestAnimationFrame(() => {
-      root.style.scrollBehavior = previousScrollBehavior;
+    if (window.scrollY <= 1) {
+      setInvitationState('ready');
       setIntroProgress(0);
-    });
+      return;
+    }
+
+    setInvitationState('replaying');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   return (
