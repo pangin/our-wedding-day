@@ -1,74 +1,139 @@
-import type { KakaoSDK } from '../types/kakao';
+const KAKAO_AUTHORIZE_URL = 'https://kauth.kakao.com/oauth/authorize';
+const KAKAO_TOKEN_URL = 'https://kauth.kakao.com/oauth/token';
+const STORAGE_KEY = 'kakao_oauth_pkce';
 
 const kakaoJsKey =
   (import.meta.env.VITE_KAKAO_JS_KEY as string | undefined) ??
   (import.meta.env.VITE_KAKAO_MAP_KEY as string | undefined);
 
-async function waitForKakaoSdk(timeoutMs = 5000): Promise<KakaoSDK> {
-  if (typeof window === 'undefined') {
-    throw new Error('Kakao SDK 는 브라우저 환경에서만 사용할 수 있습니다.');
-  }
-  if (window.Kakao) return window.Kakao;
+type PendingAuth = {
+  verifier: string;
+  state: string;
+  nonce: string;
+  redirectUri: string;
+};
 
-  const start = Date.now();
-  return new Promise((resolve, reject) => {
-    const timer = window.setInterval(() => {
-      if (window.Kakao) {
-        window.clearInterval(timer);
-        resolve(window.Kakao);
-        return;
-      }
-      if (Date.now() - start > timeoutMs) {
-        window.clearInterval(timer);
-        reject(new Error('Kakao SDK 로딩 시간이 초과되었습니다.'));
-      }
-    }, 100);
-  });
+function base64UrlEncode(bytes: Uint8Array): string {
+  let bin = '';
+  for (let i = 0; i < bytes.length; i += 1) {
+    bin += String.fromCharCode(bytes[i]);
+  }
+  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
-async function ensureKakao(): Promise<KakaoSDK> {
+function randomBytes(length: number): Uint8Array {
+  const buffer = new Uint8Array(length);
+  crypto.getRandomValues(buffer);
+  return buffer;
+}
+
+async function sha256(input: string): Promise<Uint8Array> {
+  const hash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(input));
+  return new Uint8Array(hash);
+}
+
+function getRedirectUri(): string {
+  const base = import.meta.env.BASE_URL ?? '/';
+  return `${window.location.origin}${base}`;
+}
+
+export async function redirectToKakaoLogin(): Promise<void> {
   if (!kakaoJsKey) {
-    throw new Error('VITE_KAKAO_JS_KEY 또는 VITE_KAKAO_MAP_KEY 가 설정되지 않았습니다.');
+    throw new Error('Kakao JavaScript 키 (VITE_KAKAO_MAP_KEY) 가 설정되지 않았습니다.');
   }
-  const Kakao = await waitForKakaoSdk();
-  if (!Kakao.isInitialized()) {
-    Kakao.init(kakaoJsKey);
-  }
-  return Kakao;
+
+  const verifier = base64UrlEncode(randomBytes(32));
+  const challenge = base64UrlEncode(await sha256(verifier));
+  const state = base64UrlEncode(randomBytes(16));
+  const nonce = base64UrlEncode(randomBytes(16));
+  const redirectUri = getRedirectUri();
+
+  const pending: PendingAuth = { verifier, state, nonce, redirectUri };
+  sessionStorage.setItem(STORAGE_KEY, JSON.stringify(pending));
+
+  const url = new URL(KAKAO_AUTHORIZE_URL);
+  url.searchParams.set('client_id', kakaoJsKey);
+  url.searchParams.set('redirect_uri', redirectUri);
+  url.searchParams.set('response_type', 'code');
+  url.searchParams.set('scope', 'openid profile_nickname profile_image');
+  url.searchParams.set('state', state);
+  url.searchParams.set('nonce', nonce);
+  url.searchParams.set('code_challenge', challenge);
+  url.searchParams.set('code_challenge_method', 'S256');
+
+  window.location.assign(url.toString());
 }
 
-function randomNonce(): string {
-  const bytes = new Uint8Array(16);
-  crypto.getRandomValues(bytes);
-  return Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
-}
+export async function consumeKakaoCallback(): Promise<
+  { idToken: string; nonce: string } | null
+> {
+  if (typeof window === 'undefined') return null;
 
-export async function loginWithKakaoForIdToken(): Promise<{ idToken: string; nonce: string }> {
-  const Kakao = await ensureKakao();
-  const nonce = randomNonce();
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get('code');
+  const state = params.get('state');
+  if (!code || !state) return null;
 
-  return new Promise((resolve, reject) => {
-    Kakao.Auth.login({
-      scope: 'openid profile_nickname profile_image',
-      nonce,
-      success: (resp) => {
-        if (!resp.id_token) {
-          reject(
-            new Error(
-              'Kakao 응답에 id_token 이 없습니다. Kakao Developers Console 에서 OpenID Connect 활성화 여부를 확인해 주세요.',
-            ),
-          );
-          return;
-        }
-        resolve({ idToken: resp.id_token, nonce });
-      },
-      fail: (err) => {
-        const message =
-          err && typeof err === 'object' && 'error_description' in err
-            ? String((err as { error_description: unknown }).error_description)
-            : '카카오 인증이 취소되었거나 실패했습니다.';
-        reject(new Error(message));
-      },
-    });
+  const stored = sessionStorage.getItem(STORAGE_KEY);
+  if (!stored) {
+    cleanQueryString();
+    return null;
+  }
+
+  let pending: PendingAuth;
+  try {
+    pending = JSON.parse(stored) as PendingAuth;
+  } catch {
+    sessionStorage.removeItem(STORAGE_KEY);
+    cleanQueryString();
+    return null;
+  }
+
+  if (state !== pending.state) {
+    sessionStorage.removeItem(STORAGE_KEY);
+    cleanQueryString();
+    throw new Error('카카오 인증 state 검증에 실패했습니다.');
+  }
+
+  if (!kakaoJsKey) {
+    sessionStorage.removeItem(STORAGE_KEY);
+    throw new Error('Kakao JavaScript 키가 설정되지 않았습니다.');
+  }
+
+  const response = await fetch(KAKAO_TOKEN_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      grant_type: 'authorization_code',
+      client_id: kakaoJsKey,
+      redirect_uri: pending.redirectUri,
+      code,
+      code_verifier: pending.verifier,
+    }).toString(),
   });
+
+  sessionStorage.removeItem(STORAGE_KEY);
+
+  if (!response.ok) {
+    const text = await response.text();
+    cleanQueryString();
+    throw new Error(`Kakao 토큰 교환 실패: ${text}`);
+  }
+
+  const data = (await response.json()) as { id_token?: string };
+  cleanQueryString();
+
+  if (!data.id_token) {
+    throw new Error(
+      'Kakao 응답에 id_token 이 없습니다. Kakao Developers Console 의 OpenID Connect 활성화 여부를 확인해 주세요.',
+    );
+  }
+
+  return { idToken: data.id_token, nonce: pending.nonce };
+}
+
+function cleanQueryString(): void {
+  const url = new URL(window.location.href);
+  url.search = '';
+  window.history.replaceState({}, '', url.toString());
 }

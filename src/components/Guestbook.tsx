@@ -3,7 +3,7 @@ import type { Session } from '@supabase/supabase-js';
 import { Edit3, LogIn, LogOut, Send, Sparkles } from 'lucide-react';
 import { TurnstileWidget } from './TurnstileWidget';
 import { validateGuestbookMessage } from '../lib/commentPolicy';
-import { loginWithKakaoForIdToken } from '../lib/kakao';
+import { consumeKakaoCallback, redirectToKakaoLogin } from '../lib/kakao';
 import { isSupabaseConfigured, supabase, type GuestbookComment } from '../lib/supabase';
 
 type UpsertResponse = {
@@ -69,17 +69,44 @@ export function Guestbook() {
       return;
     }
 
-    void supabase.auth.getSession().then(({ data }) => {
+    let cancelled = false;
+
+    void (async () => {
+      try {
+        const callback = await consumeKakaoCallback();
+        if (callback && supabase) {
+          const { error } = await supabase.auth.signInWithIdToken({
+            provider: 'kakao',
+            token: callback.idToken,
+            nonce: callback.nonce,
+          });
+          if (error && !cancelled) {
+            setStatusMessage(`카카오 로그인 실패: ${error.message}`);
+          }
+        }
+      } catch (err) {
+        if (!cancelled) {
+          const message = err instanceof Error ? err.message : '알 수 없는 오류';
+          setStatusMessage(`카카오 로그인 실패: ${message}`);
+        }
+      }
+
+      if (cancelled || !supabase) return;
+      const { data } = await supabase.auth.getSession();
+      if (cancelled) return;
       setSession(data.session);
       void loadMyComment(data.session);
-    });
+    })();
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, nextSession) => {
       setSession(nextSession);
       void loadMyComment(nextSession);
     });
 
-    return () => listener.subscription.unsubscribe();
+    return () => {
+      cancelled = true;
+      listener.subscription.unsubscribe();
+    };
   }, [loadMyComment]);
 
   useEffect(() => {
@@ -105,15 +132,7 @@ export function Guestbook() {
 
     if (provider === 'kakao') {
       try {
-        const { idToken, nonce } = await loginWithKakaoForIdToken();
-        const { error } = await supabase.auth.signInWithIdToken({
-          provider: 'kakao',
-          token: idToken,
-          nonce,
-        });
-        if (error) {
-          setStatusMessage(`카카오 로그인 실패: ${error.message}`);
-        }
+        await redirectToKakaoLogin();
       } catch (err) {
         const message = err instanceof Error ? err.message : '알 수 없는 오류';
         setStatusMessage(`카카오 로그인 실패: ${message}`);
