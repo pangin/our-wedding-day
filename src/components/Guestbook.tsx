@@ -95,6 +95,7 @@ export function Guestbook() {
       provider,
       options: {
         redirectTo: window.location.href.split('#')[0] + '#guestbook',
+        scopes: provider === 'kakao' ? 'profile_nickname profile_image' : undefined,
       },
     });
   }
