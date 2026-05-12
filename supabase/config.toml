@@ -6,6 +6,13 @@ verify_jwt = true
 [functions.admin-comments]
 verify_jwt = true
 
+[auth]
+site_url = "https://pangin.github.io/our-wedding-day/"
+additional_redirect_urls = [
+  "https://pangin.github.io/our-wedding-day/**",
+  "http://localhost:5173/**",
+]
+
 [auth.external.google]
 enabled = true
 client_id = "env(GOOGLE_OAUTH_CLIENT_ID)"
