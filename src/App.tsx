@@ -25,6 +25,7 @@ const sections = [
   { id: 'story', label: '스토리' },
   { id: 'gallery', label: '사진' },
   { id: 'venue', label: '오시는 길' },
+  { id: 'account', label: '마음 전하기' },
   { id: 'guestbook', label: '방명록' },
 ];
 
@@ -164,6 +165,15 @@ export function App() {
     window.setTimeout(() => setCopyStatus(''), 2200);
   }
 
+  async function copyAccount(account: { name: string; bank: string; number: string }) {
+    try {
+      await navigator.clipboard.writeText(`${account.bank} ${account.number} ${account.name}`);
+      showNotice(`${account.name} 계좌번호가 복사되었습니다.`);
+    } catch {
+      showNotice('계좌번호 복사에 실패했어요. 직접 복사해 주세요.');
+    }
+  }
+
   async function shareInvitation() {
     const url = window.location.href.split('#')[0];
     if (navigator.share) {
@@ -234,6 +244,18 @@ export function App() {
                 <p className="invitation-card__names">
                   {wedding.couple.groom} <span>&</span> {wedding.couple.bride}
                 </p>
+                <ul className="invitation-card__lineage" aria-label="가족 소개">
+                  <li>
+                    <span>{wedding.families.groom.father} · {wedding.families.groom.mother}</span>
+                    <span className="invitation-card__lineage-rel">의 {wedding.families.groom.relation}</span>
+                    <strong>{wedding.families.groom.fullName}</strong>
+                  </li>
+                  <li>
+                    <span>{wedding.families.bride.father} · {wedding.families.bride.mother}</span>
+                    <span className="invitation-card__lineage-rel">의 {wedding.families.bride.relation}</span>
+                    <strong>{wedding.families.bride.fullName}</strong>
+                  </li>
+                </ul>
                 <p className="invitation-card__copy">{wedding.copy.opening}</p>
                 <dl className="invitation-card__details">
                   <div>
@@ -266,6 +288,23 @@ export function App() {
             <div className="section-copy">
               <p className="eyebrow">Invitation</p>
               <h2>같은 방향을 바라보며</h2>
+              <p className="section-copy__lead">{wedding.copy.invitationLead}</p>
+              <ul className="lineage" aria-label="양가 가족 소개">
+                <li>
+                  <span className="lineage__parents">
+                    {wedding.families.groom.father} · {wedding.families.groom.mother}
+                  </span>
+                  <span className="lineage__relation">의 {wedding.families.groom.relation}</span>
+                  <strong className="lineage__name">{wedding.families.groom.fullName}</strong>
+                </li>
+                <li>
+                  <span className="lineage__parents">
+                    {wedding.families.bride.father} · {wedding.families.bride.mother}
+                  </span>
+                  <span className="lineage__relation">의 {wedding.families.bride.relation}</span>
+                  <strong className="lineage__name">{wedding.families.bride.fullName}</strong>
+                </li>
+              </ul>
               <p>{wedding.copy.invitation}</p>
             </div>
             <div className="timeline" aria-label="우리 이야기">
@@ -362,6 +401,60 @@ export function App() {
           onClose={() => setIsMapPickerOpen(false)}
           onNotice={showNotice}
         />
+
+        <section className="section section--account" id="account">
+          <div className="section__inner account-layout">
+            <div className="section-copy">
+              <p className="eyebrow">Heartful</p>
+              <h2>{wedding.copy.accountsHeading}</h2>
+              <p>{wedding.copy.accountsNote}</p>
+            </div>
+            <div className="account-groups">
+              {(['groom', 'bride'] as const).map((side) => (
+                <details className="account-group" key={side} open>
+                  <summary>
+                    <span className="account-group__label">
+                      {side === 'groom' ? '신랑측' : '신부측'}
+                    </span>
+                    <span className="account-group__person">
+                      {wedding.families[side].fullName}
+                    </span>
+                    <ChevronDown
+                      size={18}
+                      aria-hidden="true"
+                      className="account-group__chevron"
+                    />
+                  </summary>
+                  <ul className="account-list">
+                    {wedding.accounts[side].map((account) => (
+                      <li className="account-row" key={`${side}-${account.name}`}>
+                        <div className="account-row__info">
+                          <p className="account-row__role">
+                            <span>{account.role}</span>
+                            <strong>{account.name}</strong>
+                          </p>
+                          <p className="account-row__number">
+                            {account.bank} {account.number}
+                          </p>
+                        </div>
+                        <button
+                          className="button button--ghost button--small"
+                          type="button"
+                          onClick={() => copyAccount(account)}
+                          aria-label={`${account.name} 계좌번호 복사`}
+                        >
+                          <Copy size={15} aria-hidden="true" />
+                          복사
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              ))}
+            </div>
+            {copyStatus ? <p className="copy-toast">{copyStatus}</p> : null}
+          </div>
+        </section>
 
         <Guestbook />
 

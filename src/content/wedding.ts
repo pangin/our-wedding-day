@@ -11,6 +11,21 @@ export type TimelineItem = {
   body: string;
 };
 
+export type FamilyLine = {
+  father: string;
+  mother: string;
+  relation: string;
+  name: string;
+  fullName: string;
+};
+
+export type AccountEntry = {
+  role: string;
+  name: string;
+  bank: string;
+  number: string;
+};
+
 const cloudinaryCloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'demo';
 const cloudinaryBaseUrl = `https://res.cloudinary.com/${cloudinaryCloudName}/image/upload`;
 
@@ -23,8 +38,23 @@ export const wedding = {
     groom: '성욱',
     bride: '혜경',
     headline: '우리 결혼합니다',
-    families: '양가 가족의 마음을 모아 초대합니다',
   },
+  families: {
+    groom: {
+      father: '김형찬',
+      mother: '이수선',
+      relation: '장남',
+      name: '성욱',
+      fullName: '김성욱',
+    },
+    bride: {
+      father: '김웅열',
+      mother: '박경아',
+      relation: '장녀',
+      name: '혜경',
+      fullName: '김혜경',
+    },
+  } satisfies { groom: FamilyLine; bride: FamilyLine },
   event: {
     date: '2026-06-27T15:00:00+09:00',
     displayDate: '2026년 6월 27일 토요일 오후 3시',
@@ -41,8 +71,12 @@ export const wedding = {
   copy: {
     opening:
       '서로의 계절을 오래 바라보다가, 이제 같은 계절을 함께 걸어가려 합니다.',
+    invitationLead: '두 사람이 사랑으로 만나, 이제 한 가정을 이루려 합니다.',
     invitation:
-      '소중한 분들을 모시고 작은 약속의 시간을 갖고자 합니다. 오셔서 따뜻한 마음으로 축복해 주세요.',
+      '바쁘신 가운데 시간 내어 축복해 주시면 큰 기쁨이 되겠습니다. 두 사람의 첫걸음에 함께해 주세요.',
+    accountsHeading: '마음 전하실 곳',
+    accountsNote:
+      '축하의 자리에 직접 오시기 어려운 분들을 위해 계좌번호를 함께 안내드립니다. 보내주시는 마음, 오래도록 간직하겠습니다.',
     footer: '멀리서 전해주시는 마음도 깊이 간직하겠습니다.',
   },
   images: {
@@ -91,6 +125,18 @@ export const wedding = {
       body: '이제 한 가족으로 시작하는 첫날을 여러분과 함께하고 싶습니다.',
     },
   ] satisfies TimelineItem[],
+  accounts: {
+    groom: [
+      { role: '신랑 아버지', name: '김형찬', bank: '신한은행', number: '110-013-712418' },
+      { role: '신랑 어머니', name: '이수선', bank: '신한은행', number: '110-111-622620' },
+      { role: '신랑', name: '김성욱', bank: '신한은행', number: '110-456-926859' },
+    ],
+    bride: [
+      { role: '신부 아버지', name: '김웅열', bank: '농협은행', number: '352-1326-8109-13' },
+      { role: '신부 어머니', name: '박경아', bank: '기업은행', number: '45203-5050-01011' },
+      { role: '신부', name: '김혜경', bank: '신한은행', number: '110-196-623602' },
+    ],
+  } satisfies { groom: AccountEntry[]; bride: AccountEntry[] },
   links: {
     calendarTitle: '성욱과 혜경의 결혼식',
     shareText: '2026년 6월 27일, 성욱과 혜경의 결혼식에 초대합니다.',

@@ -525,6 +525,187 @@ button {
   margin: 0;
 }
 
+.section-copy__lead {
+  margin: 0 0 18px;
+  color: var(--ink);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.lineage {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 22px;
+  padding: 18px 20px;
+  list-style: none;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 250, 242, 0.6);
+}
+
+.lineage li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  color: var(--muted);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+.lineage__parents {
+  letter-spacing: 0.01em;
+}
+
+.lineage__relation {
+  color: var(--muted);
+}
+
+.lineage__name {
+  color: var(--ink);
+  font-weight: 800;
+  font-size: 1.06rem;
+}
+
+.invitation-card__lineage {
+  display: grid;
+  gap: 4px;
+  margin: 14px 0 6px;
+  padding: 0;
+  list-style: none;
+  color: var(--muted);
+  font-size: 0.94rem;
+  line-height: 1.55;
+}
+
+.invitation-card__lineage li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 6px;
+}
+
+.invitation-card__lineage strong {
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.invitation-card__lineage-rel {
+  color: var(--muted);
+}
+
+.section--account {
+  background: #f1e9dc;
+}
+
+.account-layout {
+  grid-template-columns: minmax(0, 0.82fr) minmax(320px, 1.18fr);
+  align-items: start;
+}
+
+.account-groups {
+  display: grid;
+  gap: 16px;
+}
+
+.account-group {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255, 250, 242, 0.86);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.account-group > summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 22px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.account-group > summary::-webkit-details-marker {
+  display: none;
+}
+
+.account-group__label {
+  color: var(--rose);
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  letter-spacing: 0.02em;
+}
+
+.account-group__person {
+  color: var(--muted);
+  font-size: 0.94rem;
+}
+
+.account-group__chevron {
+  margin-left: auto;
+  color: var(--muted);
+  transition: transform 0.2s ease;
+}
+
+.account-group[open] .account-group__chevron {
+  transform: rotate(180deg);
+}
+
+.account-list {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0 22px 18px;
+  list-style: none;
+  border-top: 1px dashed var(--line);
+}
+
+.account-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px dashed var(--line);
+}
+
+.account-row:last-child {
+  border-bottom: none;
+}
+
+.account-row__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.account-row__role {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.account-row__role strong {
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.account-row__number {
+  margin: 4px 0 0;
+  color: var(--ink);
+  font-feature-settings: 'tnum' on;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+}
+
+.account-row .button--small {
+  flex-shrink: 0;
+}
+
 .section--gallery {
   background: #ebe4da;
 }
@@ -1078,6 +1259,7 @@ button {
   .intro-layout,
   .gallery-layout,
   .venue-layout,
+  .account-layout,
   .guestbook-grid,
   .share-layout {
     grid-template-columns: 1fr;
