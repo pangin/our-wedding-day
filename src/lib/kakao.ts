@@ -32,6 +32,10 @@ async function sha256(input: string): Promise<Uint8Array> {
   return new Uint8Array(hash);
 }
 
+function hexEncode(bytes: Uint8Array): string {
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
+}
+
 function getRedirectUri(): string {
   const base = import.meta.env.BASE_URL ?? '/';
   return `${window.location.origin}${base}`;
@@ -46,7 +50,7 @@ export async function redirectToKakaoLogin(): Promise<void> {
   const challenge = base64UrlEncode(await sha256(verifier));
   const state = base64UrlEncode(randomBytes(16));
   const nonce = base64UrlEncode(randomBytes(16));
-  const nonceHash = base64UrlEncode(await sha256(nonce));
+  const nonceHash = hexEncode(await sha256(nonce));
   const redirectUri = getRedirectUri();
 
   const pending: PendingAuth = { verifier, state, nonce, redirectUri };
