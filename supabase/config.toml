@@ -15,5 +15,16 @@ additional_redirect_urls = [
 
 [auth.external.google]
 enabled = true
-client_id = "env(GOOGLE_OAUTH_CLIENT_ID)"
+client_id = "501897595529-kqegetcvdh7o88gqtp9m5p6utblmgh2u.apps.googleusercontent.com"
 secret = "env(GOOGLE_OAUTH_SECRET)"
+# secret 은 Supabase Dashboard 에서 직접 관리. config push 전 GOOGLE_OAUTH_SECRET
+# 환경변수가 실제 값으로 세팅돼 있지 않으면 secret 이 빈 문자열로 덮어써질 위험이
+# 있으므로 secret 변경이 필요 없는 경우 push 자체를 피할 것.
+
+# Kakao: client_id 는 카카오 앱의 JavaScript 키. signInWithIdToken 의 audience
+# 검증을 통과시키기 위해 authorize 시 보내는 client_id 와 동일해야 함.
+# secret 은 본 앱이 PKCE 흐름만 사용하므로 실제로 호출되지 않음 (placeholder).
+[auth.external.kakao]
+enabled = true
+client_id = "7044fbaf66866f3b17a4c4e5d6178cc5"
+secret = "env(KAKAO_OAUTH_SECRET)"
