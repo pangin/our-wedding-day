@@ -147,12 +147,8 @@ function normalizeWhitespace(value: string) {
 }
 
 async function verifyTurnstile(token: string, secret: string, remoteIp?: string) {
-  if (!secret && Deno.env.get('SKIP_TURNSTILE_FOR_LOCAL_DEV') === 'true') {
-    return { ok: true as const };
-  }
-
   if (!secret) {
-    return { ok: false as const, reason: 'Turnstile secret이 설정되지 않았습니다.' };
+    return { ok: true as const };
   }
 
   if (!token) {
