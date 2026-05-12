@@ -85,16 +85,26 @@ export function Guestbook() {
     void loadComments();
   }, [loadComments]);
 
+  useEffect(() => {
+    if (session && sessionStorage.getItem('postLoginScrollTo') === 'guestbook') {
+      sessionStorage.removeItem('postLoginScrollTo');
+      if (window.location.hash !== '#guestbook') {
+        window.location.hash = '#guestbook';
+      }
+    }
+  }, [session]);
+
   async function signIn(provider: 'kakao' | 'google') {
     if (!supabase) {
       setStatusMessage('Supabase 환경 변수가 필요합니다.');
       return;
     }
 
+    sessionStorage.setItem('postLoginScrollTo', 'guestbook');
     await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: window.location.href.split('#')[0] + '#guestbook',
+        redirectTo: window.location.href.split('#')[0],
         scopes: provider === 'kakao' ? 'profile_nickname profile_image' : undefined,
       },
     });
