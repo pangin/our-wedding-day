@@ -3,6 +3,7 @@ import type { Session } from '@supabase/supabase-js';
 import { Edit3, LogIn, LogOut, Send, Sparkles } from 'lucide-react';
 import { TurnstileWidget } from './TurnstileWidget';
 import { validateGuestbookMessage } from '../lib/commentPolicy';
+import { loginWithKakaoForIdToken } from '../lib/kakao';
 import { isSupabaseConfigured, supabase, type GuestbookComment } from '../lib/supabase';
 
 type UpsertResponse = {
@@ -101,11 +102,29 @@ export function Guestbook() {
     }
 
     sessionStorage.setItem('postLoginScrollTo', 'guestbook');
+
+    if (provider === 'kakao') {
+      try {
+        const { idToken, nonce } = await loginWithKakaoForIdToken();
+        const { error } = await supabase.auth.signInWithIdToken({
+          provider: 'kakao',
+          token: idToken,
+          nonce,
+        });
+        if (error) {
+          setStatusMessage(`카카오 로그인 실패: ${error.message}`);
+        }
+      } catch (err) {
+        const message = err instanceof Error ? err.message : '알 수 없는 오류';
+        setStatusMessage(`카카오 로그인 실패: ${message}`);
+      }
+      return;
+    }
+
     await supabase.auth.signInWithOAuth({
       provider,
       options: {
         redirectTo: window.location.href.split('#')[0],
-        scopes: provider === 'kakao' ? 'profile_nickname profile_image' : undefined,
       },
     });
   }
