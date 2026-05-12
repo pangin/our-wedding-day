@@ -438,13 +438,13 @@ export function App() {
                           </p>
                         </div>
                         <button
-                          className="button button--ghost button--small"
+                          className="button button--ghost button--small account-row__copy"
                           type="button"
                           onClick={() => copyAccount(account)}
                           aria-label={`${account.name} 계좌번호 복사`}
                         >
                           <Copy size={15} aria-hidden="true" />
-                          복사
+                          <span className="account-row__copy-label">복사</span>
                         </button>
                       </li>
                     ))}

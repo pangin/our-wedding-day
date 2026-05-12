@@ -702,8 +702,54 @@ button {
   letter-spacing: 0.01em;
 }
 
-.account-row .button--small {
+.account-row__copy {
   flex-shrink: 0;
+}
+
+@media (max-width: 620px) {
+  .account-group > summary {
+    padding: 16px 18px;
+  }
+
+  .account-list {
+    padding: 0 18px 14px;
+  }
+
+  .account-row {
+    gap: 10px;
+  }
+
+  .account-row__role {
+    font-size: 0.78rem;
+  }
+
+  .account-row__role strong {
+    font-size: 0.95rem;
+  }
+
+  .account-row__number {
+    font-size: 0.9rem;
+    word-break: keep-all;
+  }
+
+  .account-row__copy {
+    width: 36px;
+    min-height: 36px;
+    padding: 0;
+    gap: 0;
+  }
+
+  .account-row__copy-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
 }
 
 .section--gallery {
