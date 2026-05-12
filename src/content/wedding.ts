@@ -11,6 +11,13 @@ export type TimelineItem = {
   body: string;
 };
 
+const cloudinaryCloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'demo';
+const cloudinaryBaseUrl = `https://res.cloudinary.com/${cloudinaryCloudName}/image/upload`;
+
+function cloudinaryImage(publicId: string, transformation: string) {
+  return `${cloudinaryBaseUrl}/${transformation}/${publicId}`;
+}
+
 export const wedding = {
   couple: {
     groom: '성욱',
@@ -38,30 +45,29 @@ export const wedding = {
     footer: '멀리서 전해주시는 마음도 깊이 간직하겠습니다.',
   },
   images: {
-    hero:
-      'https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=2200&q=84',
+    hero: cloudinaryImage('sample', 'f_auto,q_auto,w_2200'),
     gallery: [
       {
         id: 'walk',
-        src: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1400&q=82',
+        src: cloudinaryImage('sample', 'f_auto,q_auto,w_1400,h_1750,c_fill'),
         alt: '햇살 아래 함께 걷는 커플',
         caption: '함께 걷는 길',
       },
       {
         id: 'hands',
-        src: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1400&q=82',
+        src: cloudinaryImage('woman', 'f_auto,q_auto,w_1400,h_1750,c_fill'),
         alt: '손을 맞잡은 커플',
         caption: '작은 약속',
       },
       {
         id: 'bouquet',
-        src: 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=1400&q=82',
+        src: cloudinaryImage('coffee', 'f_auto,q_auto,w_1400,h_1750,c_fill'),
         alt: '웨딩 플라워와 예식 공간',
         caption: '기억하고 싶은 순간',
       },
       {
         id: 'table',
-        src: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1400&q=82',
+        src: cloudinaryImage('balloons', 'f_auto,q_auto,w_1400,h_1750,c_fill'),
         alt: '따뜻한 분위기의 웨딩 테이블',
         caption: '따뜻한 축하',
       },
