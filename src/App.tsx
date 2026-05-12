@@ -14,8 +14,11 @@ import {
 } from 'lucide-react';
 import { AdminPanel } from './components/AdminPanel';
 import { Guestbook } from './components/Guestbook';
+import { MapEmbed } from './components/MapEmbed';
+import { MapPickerDialog } from './components/MapPickerDialog';
 import { wedding } from './content/wedding';
 import { buildGoogleCalendarUrl } from './lib/commentPolicy';
+import type { Venue } from './lib/mapLinks';
 import { useHash } from './hooks/useHash';
 
 const sections = [
@@ -52,6 +55,22 @@ export function App() {
   const [isMusicOn, setIsMusicOn] = useState(false);
   const [selectedImage, setSelectedImage] = useState(wedding.images.gallery[0]);
   const [copyStatus, setCopyStatus] = useState('');
+  const [isMapPickerOpen, setIsMapPickerOpen] = useState(false);
+
+  const venueLocation = useMemo<Venue>(
+    () => ({
+      name: wedding.event.venue,
+      address: wedding.event.address,
+      lat: wedding.event.lat,
+      lng: wedding.event.lng,
+    }),
+    [],
+  );
+
+  function showNotice(message: string) {
+    setCopyStatus(message);
+    window.setTimeout(() => setCopyStatus(''), 2200);
+  }
 
   const eventDate = useMemo(() => new Date(wedding.event.date), []);
   const calendarUrl = useMemo(() => {
@@ -324,14 +343,26 @@ export function App() {
                 </button>
               </div>
             </div>
-            <a className="map-panel" href={wedding.event.mapUrl} target="_blank" rel="noreferrer">
-              <MapPin size={30} aria-hidden="true" />
-              <span>지도 열기</span>
-              <strong>{wedding.event.venue}</strong>
-              <small>{wedding.event.hall}</small>
-            </a>
+            <div className="venue-map">
+              <MapEmbed venue={venueLocation} />
+              <button
+                type="button"
+                className="button button--map"
+                onClick={() => setIsMapPickerOpen(true)}
+              >
+                <MapPin size={17} aria-hidden="true" />
+                지도 열기
+              </button>
+            </div>
           </div>
         </section>
+
+        <MapPickerDialog
+          open={isMapPickerOpen}
+          venue={venueLocation}
+          onClose={() => setIsMapPickerOpen(false)}
+          onNotice={showNotice}
+        />
 
         <Guestbook />
 
