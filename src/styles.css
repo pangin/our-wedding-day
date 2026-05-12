@@ -732,8 +732,10 @@ button {
     word-break: keep-all;
   }
 
-  .account-row__copy {
+  .account-row .account-row__copy {
+    flex: 0 0 36px;
     width: 36px;
+    min-width: 36px;
     min-height: 36px;
     padding: 0;
     gap: 0;
