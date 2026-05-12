@@ -46,6 +46,7 @@ export async function redirectToKakaoLogin(): Promise<void> {
   const challenge = base64UrlEncode(await sha256(verifier));
   const state = base64UrlEncode(randomBytes(16));
   const nonce = base64UrlEncode(randomBytes(16));
+  const nonceHash = base64UrlEncode(await sha256(nonce));
   const redirectUri = getRedirectUri();
 
   const pending: PendingAuth = { verifier, state, nonce, redirectUri };
@@ -57,7 +58,7 @@ export async function redirectToKakaoLogin(): Promise<void> {
   url.searchParams.set('response_type', 'code');
   url.searchParams.set('scope', 'openid profile_nickname profile_image');
   url.searchParams.set('state', state);
-  url.searchParams.set('nonce', nonce);
+  url.searchParams.set('nonce', nonceHash);
   url.searchParams.set('code_challenge', challenge);
   url.searchParams.set('code_challenge_method', 'S256');
 
