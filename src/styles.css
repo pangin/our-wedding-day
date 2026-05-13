@@ -139,7 +139,7 @@ button {
 .invitation-intro {
   position: relative;
   min-height: 200svh;
-  background: var(--paper);
+  background: #1d1916;
   color: var(--ink);
 }
 
@@ -151,6 +151,85 @@ button {
   place-items: center;
   overflow: hidden;
   perspective: 1400px;
+}
+
+.invitation-backdrop,
+.invitation-backdrop__shade {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.invitation-backdrop {
+  object-fit: cover;
+  object-position: 50% 38%;
+  transform: scale(var(--backdrop-scale));
+  filter: saturate(0.78) contrast(1.02) blur(var(--backdrop-blur));
+  opacity: var(--backdrop-opacity);
+}
+
+.invitation-backdrop__shade {
+  background:
+    radial-gradient(circle at 50% 32%, rgba(255, 250, 242, 0.18), rgba(24, 21, 18, 0) 42%),
+    linear-gradient(180deg, rgba(24, 21, 18, 0.32), rgba(24, 21, 18, 0.78));
+}
+
+.opening-copy {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  max-width: min(720px, calc(100% - 42px));
+  justify-items: center;
+  gap: 12px;
+  color: #fffaf2;
+  text-align: center;
+  transform: translateY(var(--opening-y));
+  opacity: var(--opening-opacity);
+  pointer-events: none;
+}
+
+.opening-copy p,
+.opening-copy h1,
+.opening-copy span {
+  margin: 0;
+}
+
+.opening-copy p {
+  color: rgba(255, 250, 242, 0.7);
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.opening-copy h1 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.36em;
+  flex-wrap: wrap;
+  font-family: var(--font-display);
+  font-size: 5rem;
+  font-weight: 400;
+  line-height: 1.04;
+}
+
+.opening-copy h1 svg {
+  color: rgba(255, 250, 242, 0.78);
+}
+
+.opening-copy span {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  border: 1px solid rgba(255, 250, 242, 0.32);
+  border-radius: 999px;
+  padding: 0 14px;
+  background: rgba(255, 250, 242, 0.12);
+  color: rgba(255, 250, 242, 0.82);
+  backdrop-filter: blur(12px);
 }
 
 .invitation-card {
@@ -165,8 +244,9 @@ button {
   border: 1px solid var(--line);
   border-radius: 18px;
   background: var(--paper-strong);
-  box-shadow: 0 30px 80px rgba(22, 17, 13, 0.18);
-  will-change: width, min-height, transform;
+  box-shadow: 0 30px 80px rgba(22, 17, 13, 0.32);
+  opacity: var(--card-opacity);
+  will-change: width, min-height, transform, opacity;
 }
 
 .invitation-card__media {
@@ -184,7 +264,9 @@ button {
   height: 100%;
   object-fit: cover;
   object-position: center;
-  will-change: transform;
+  opacity: var(--photo-opacity);
+  transform: scale(var(--photo-scale));
+  will-change: transform, opacity;
 }
 
 .invitation-card__body {
@@ -300,11 +382,11 @@ button {
   height: 42px;
   margin: -42px auto 28px;
   place-items: center;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(255, 250, 242, 0.4);
   border-radius: 50%;
-  background: rgba(255, 250, 242, 0.78);
-  color: var(--ink);
-  box-shadow: var(--shadow);
+  background: rgba(37, 31, 27, 0.42);
+  color: #fffaf2;
+  backdrop-filter: blur(10px);
 }
 
 .event-card__actions,

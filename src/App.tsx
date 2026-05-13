@@ -87,19 +87,29 @@ export function App() {
   const isAdmin = hash === '#admin';
   const displayedProgress = invitationState === 'opened' ? 1 : introProgress;
   const invitationMotion = useMemo<MotionStyle>(() => {
-    const card = easeInOutCubic(progressBetween(displayedProgress, 0, 0.7));
-    const copy = easeOutCubic(progressBetween(displayedProgress, 0.18, 0.8));
-    const details = easeOutCubic(progressBetween(displayedProgress, 0.5, 0.98));
+    const opening = easeOutCubic(progressBetween(displayedProgress, 0, 0.36));
+    const card = easeInOutCubic(progressBetween(displayedProgress, 0.12, 0.82));
+    const photo = easeOutCubic(progressBetween(displayedProgress, 0.2, 0.72));
+    const copy = easeOutCubic(progressBetween(displayedProgress, 0.42, 0.88));
+    const details = easeOutCubic(progressBetween(displayedProgress, 0.62, 0.96));
 
     return {
       '--intro-progress': displayedProgress.toFixed(3),
-      '--card-y': `${24 - 24 * card}px`,
-      '--card-scale': `${0.86 + 0.14 * card}`,
+      '--opening-opacity': `${1 - opening}`,
+      '--opening-y': `${-42 * opening}px`,
+      '--card-y': `${120 - 120 * card}px`,
+      '--card-scale': `${0.88 + 0.12 * card}`,
+      '--card-opacity': `${progressBetween(displayedProgress, 0.08, 0.28)}`,
       '--card-width': `${960 + 160 * card}px`,
       '--card-min-height': `${540 + 200 * card}px`,
+      '--photo-opacity': `${photo}`,
+      '--photo-scale': `${1.06 - 0.06 * photo}`,
       '--copy-opacity': `${copy}`,
-      '--copy-y': `${24 - 24 * copy}px`,
+      '--copy-y': `${26 - 26 * copy}px`,
       '--details-opacity': `${details}`,
+      '--backdrop-opacity': `${0.62 - 0.24 * card}`,
+      '--backdrop-scale': `${1.12 - 0.08 * card}`,
+      '--backdrop-blur': `${8 - 8 * card}px`,
     };
   }, [displayedProgress]);
 
@@ -217,6 +227,17 @@ export function App() {
           style={invitationMotion}
         >
           <div className="invitation-stage">
+            <img className="invitation-backdrop" src={wedding.images.hero} alt="" aria-hidden="true" />
+            <div className="invitation-backdrop__shade" />
+            <div className="opening-copy" aria-hidden={invitationState === 'opened'}>
+              <p>Wedding Invitation</p>
+              <h1>
+                {wedding.couple.groom}
+                <Heart size={42} aria-hidden="true" strokeWidth={1.5} />
+                {wedding.couple.bride}
+              </h1>
+              <span>스크롤해서 초대장을 펼쳐보세요</span>
+            </div>
             <article className="invitation-card" aria-label="성욱과 혜경의 청첩장">
               <div className="invitation-card__media">
                 <img className="invitation-card__photo" src={wedding.images.heroCard} alt="결혼식 초대장 대표 사진" />
