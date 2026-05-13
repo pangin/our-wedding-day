@@ -57,6 +57,7 @@ export function Gallery({ images }: { images: readonly GalleryImage[] }) {
               alt={image.alt}
               loading={i === 0 ? 'eager' : 'lazy'}
               draggable={false}
+              style={image.objectPosition ? { objectPosition: image.objectPosition } : undefined}
             />
             <figcaption>{image.caption}</figcaption>
           </figure>

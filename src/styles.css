@@ -244,11 +244,18 @@ button {
 }
 
 .invitation-card__media {
-  position: relative;
+  display: grid;
+  place-items: center;
   overflow: hidden;
-  aspect-ratio: 16 / 10;
   min-height: 250px;
   background: #251f1b;
+}
+
+.invitation-card__photo-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
 }
 
 .invitation-card__photo {

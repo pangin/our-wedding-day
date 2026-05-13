@@ -240,7 +240,9 @@ export function App() {
             </div>
             <article className="invitation-card" aria-label="성욱과 혜경의 청첩장">
               <div className="invitation-card__media">
-                <img className="invitation-card__photo" src={wedding.images.hero} alt="결혼식 초대장 대표 사진" />
+                <div className="invitation-card__photo-frame">
+                  <img className="invitation-card__photo" src={wedding.images.hero} alt="결혼식 초대장 대표 사진" />
+                </div>
               </div>
               <div className="invitation-card__body">
                 <p className="invitation-card__date">{wedding.event.displayDate}</p>

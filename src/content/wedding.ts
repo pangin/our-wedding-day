@@ -4,6 +4,7 @@ export type GalleryImage = {
   full: string;
   alt: string;
   caption: string;
+  objectPosition?: string;
 };
 
 export type FamilyLine = {
@@ -74,7 +75,7 @@ export const wedding = {
     footer: '멀리서 전해주시는 마음도 깊이 간직하겠습니다.',
   },
   images: {
-    hero: cloudinaryImage('iqjox53rjk4ax7oa3avb', 'f_auto,q_auto,w_2200,h_1375,c_fill,g_auto:faces'),
+    hero: cloudinaryImage('iqjox53rjk4ax7oa3avb', 'f_auto,q_auto,w_2400'),
     gallery: [
       {
         id: 'bench',
@@ -92,10 +93,11 @@ export const wedding = {
       },
       {
         id: 'portrait',
-        src: cloudinaryImage('oiyo6hqj0ksvc6jzbext', 'f_auto,q_auto,w_1600,h_2000,c_fill,g_auto:faces'),
+        src: cloudinaryImage('oiyo6hqj0ksvc6jzbext', 'f_auto,q_auto,w_1600'),
         full: cloudinaryImage('oiyo6hqj0ksvc6jzbext', 'f_auto,q_auto,w_2400,c_limit'),
         alt: '부케를 함께 든 신랑 신부 포트레이트',
         caption: '두 사람',
+        objectPosition: '30% 50%',
       },
       {
         id: 'sunlight',
