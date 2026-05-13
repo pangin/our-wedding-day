@@ -265,9 +265,11 @@ button {
 
 .invitation-card__body {
   position: relative;
+  z-index: 1;
   display: grid;
   gap: 10px;
   padding: 24px;
+  background: rgba(255, 250, 242, 0.94);
   color: var(--ink);
   transform: translateY(var(--copy-y));
   opacity: var(--copy-opacity);
