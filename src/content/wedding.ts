@@ -1,6 +1,7 @@
 export type GalleryImage = {
   id: string;
   src: string;
+  full: string;
   alt: string;
   caption: string;
 };
@@ -77,43 +78,50 @@ export const wedding = {
     gallery: [
       {
         id: 'bench',
-        src: cloudinaryImage('iqjox53rjk4ax7oa3avb', 'f_auto,q_auto,w_1600,h_2000,c_fill'),
+        src: cloudinaryImage('iqjox53rjk4ax7oa3avb', 'f_auto,q_auto,w_1600,h_2000,c_fill,g_auto:faces'),
+        full: cloudinaryImage('iqjox53rjk4ax7oa3avb', 'f_auto,q_auto,w_2400,c_limit'),
         alt: '벤치에 함께 앉은 신랑 신부',
         caption: '함께한 순간',
       },
       {
         id: 'closeup',
-        src: cloudinaryImage('vh5vh7tlm9qqzmilfe2m', 'f_auto,q_auto,w_1600,h_2000,c_fill'),
+        src: cloudinaryImage('vh5vh7tlm9qqzmilfe2m', 'f_auto,q_auto,w_1600,h_2000,c_fill,g_auto:faces'),
+        full: cloudinaryImage('vh5vh7tlm9qqzmilfe2m', 'f_auto,q_auto,w_2400,c_limit'),
         alt: '마주 보고 환하게 웃는 신랑 신부',
         caption: '마주한 미소',
       },
       {
         id: 'portrait',
-        src: cloudinaryImage('oiyo6hqj0ksvc6jzbext', 'f_auto,q_auto,w_1600,h_2000,c_fill'),
+        src: cloudinaryImage('oiyo6hqj0ksvc6jzbext', 'f_auto,q_auto,w_1600,h_2000,c_fill,g_auto:faces'),
+        full: cloudinaryImage('oiyo6hqj0ksvc6jzbext', 'f_auto,q_auto,w_2400,c_limit'),
         alt: '부케를 함께 든 신랑 신부 포트레이트',
         caption: '두 사람',
       },
       {
         id: 'sunlight',
-        src: cloudinaryImage('fycadx9dlxkp7tyqh1ns', 'f_auto,q_auto,w_1600,h_2000,c_fill'),
+        src: cloudinaryImage('fycadx9dlxkp7tyqh1ns', 'f_auto,q_auto,w_1600,h_2000,c_fill,g_auto:faces'),
+        full: cloudinaryImage('fycadx9dlxkp7tyqh1ns', 'f_auto,q_auto,w_2400,c_limit'),
         alt: '햇살 아래 다정하게 안긴 신랑 신부',
         caption: '햇살 아래',
       },
       {
         id: 'cheek',
-        src: cloudinaryImage('tbocy1ycu9frjg2pldsa', 'f_auto,q_auto,w_1600,h_2000,c_fill'),
+        src: cloudinaryImage('tbocy1ycu9frjg2pldsa', 'f_auto,q_auto,w_1600,h_2000,c_fill,g_auto:faces'),
+        full: cloudinaryImage('tbocy1ycu9frjg2pldsa', 'f_auto,q_auto,w_2400,c_limit'),
         alt: '서로 가까이서 바라보는 신랑 신부',
         caption: '다정한 눈빛',
       },
       {
         id: 'veil',
-        src: cloudinaryImage('tlbmdtbz0nldzkmpa9w9', 'f_auto,q_auto,w_1600,h_2000,c_fill'),
+        src: cloudinaryImage('tlbmdtbz0nldzkmpa9w9', 'f_auto,q_auto,w_1600,h_2000,c_fill,g_auto:faces'),
+        full: cloudinaryImage('tlbmdtbz0nldzkmpa9w9', 'f_auto,q_auto,w_2400,c_limit'),
         alt: '베일 아래 신랑 신부',
         caption: '함께 걷는 길',
       },
       {
         id: 'sunny',
-        src: cloudinaryImage('hcyzevnmc4hadruvnv3q', 'f_auto,q_auto,w_1600,h_2000,c_fill'),
+        src: cloudinaryImage('hcyzevnmc4hadruvnv3q', 'f_auto,q_auto,w_1600,h_2000,c_fill,g_auto:faces'),
+        full: cloudinaryImage('hcyzevnmc4hadruvnv3q', 'f_auto,q_auto,w_2400,c_limit'),
         alt: '햇살 가득한 야외 신랑 신부',
         caption: '눈부신 봄날',
       },

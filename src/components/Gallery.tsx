@@ -1,23 +1,25 @@
 import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { GalleryImage } from '../content/wedding';
+import { Lightbox } from './Lightbox';
 
 const AUTO_ADVANCE_MS = 6500;
 
 export function Gallery({ images }: { images: readonly GalleryImage[] }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const total = images.length;
   const goTo = (next: number) => setIndex(((next % total) + total) % total);
 
   useEffect(() => {
-    if (paused || total <= 1) return;
+    if (paused || total <= 1 || lightboxIndex !== null) return;
     const id = window.setInterval(() => {
       setIndex((current) => (current + 1) % total);
     }, AUTO_ADVANCE_MS);
     return () => window.clearInterval(id);
-  }, [paused, total]);
+  }, [paused, total, lightboxIndex]);
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
@@ -47,8 +49,15 @@ export function Gallery({ images }: { images: readonly GalleryImage[] }) {
             className={`gallery-slide ${i === index ? 'is-active' : ''}`}
             key={image.id}
             aria-hidden={i !== index}
+            onClick={() => i === index && setLightboxIndex(i)}
+            onContextMenu={(event) => event.preventDefault()}
           >
-            <img src={image.src} alt={image.alt} loading={i === 0 ? 'eager' : 'lazy'} />
+            <img
+              src={image.src}
+              alt={image.alt}
+              loading={i === 0 ? 'eager' : 'lazy'}
+              draggable={false}
+            />
             <figcaption>{image.caption}</figcaption>
           </figure>
         ))}
@@ -82,6 +91,14 @@ export function Gallery({ images }: { images: readonly GalleryImage[] }) {
           />
         ))}
       </div>
+
+      {lightboxIndex !== null ? (
+        <Lightbox
+          images={images}
+          startIndex={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+        />
+      ) : null}
     </div>
   );
 }
