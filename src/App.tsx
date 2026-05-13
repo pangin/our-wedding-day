@@ -22,7 +22,6 @@ import type { Venue } from './lib/mapLinks';
 import { useHash } from './hooks/useHash';
 
 const sections = [
-  { id: 'story', label: '스토리' },
   { id: 'gallery', label: '사진' },
   { id: 'venue', label: '오시는 길' },
   { id: 'account', label: '마음 전하기' },
@@ -207,8 +206,9 @@ export function App() {
     <>
       <header className="site-nav" aria-label="청첩장 바로가기">
         <a className="site-nav__brand" href="#home" aria-label="처음으로">
-          <Heart size={18} aria-hidden="true" />
-          {wedding.couple.groom} & {wedding.couple.bride}
+          {wedding.couple.groom}
+          <Heart size={14} aria-hidden="true" />
+          {wedding.couple.bride}
         </a>
         <nav>
           {sections.map((section) => (
@@ -231,7 +231,11 @@ export function App() {
             <div className="invitation-backdrop__shade" />
             <div className="opening-copy" aria-hidden={invitationState === 'opened'}>
               <p>Wedding Invitation</p>
-              <h1>{wedding.couple.groom} & {wedding.couple.bride}</h1>
+              <h1>
+                {wedding.couple.groom}
+                <Heart size={42} aria-hidden="true" strokeWidth={1.5} />
+                {wedding.couple.bride}
+              </h1>
               <span>스크롤해서 초대장을 펼쳐보세요</span>
             </div>
             <article className="invitation-card" aria-label="성욱과 혜경의 청첩장">
@@ -242,7 +246,9 @@ export function App() {
                 <p className="invitation-card__date">{wedding.event.displayDate}</p>
                 <h1>{wedding.couple.headline}</h1>
                 <p className="invitation-card__names">
-                  {wedding.couple.groom} <span>&</span> {wedding.couple.bride}
+                  {wedding.couple.groom}
+                  <Heart size={22} aria-hidden="true" strokeWidth={1.6} />
+                  {wedding.couple.bride}
                 </p>
                 <ul className="invitation-card__lineage" aria-label="가족 소개">
                   <li>
@@ -278,45 +284,9 @@ export function App() {
               </div>
             </article>
           </div>
-          <a className="intro-next" href="#story" aria-label="다음 섹션으로 이동">
+          <a className="intro-next" href="#gallery" aria-label="다음 섹션으로 이동">
             <ChevronDown size={22} aria-hidden="true" />
           </a>
-        </section>
-
-        <section className="section section--intro" id="story">
-          <div className="section__inner intro-layout">
-            <div className="section-copy">
-              <p className="eyebrow">Invitation</p>
-              <h2>같은 방향을 바라보며</h2>
-              <p className="section-copy__lead">{wedding.copy.invitationLead}</p>
-              <ul className="lineage" aria-label="양가 가족 소개">
-                <li>
-                  <span className="lineage__parents">
-                    {wedding.families.groom.father} · {wedding.families.groom.mother}
-                  </span>
-                  <span className="lineage__relation">의 {wedding.families.groom.relation}</span>
-                  <strong className="lineage__name">{wedding.families.groom.fullName}</strong>
-                </li>
-                <li>
-                  <span className="lineage__parents">
-                    {wedding.families.bride.father} · {wedding.families.bride.mother}
-                  </span>
-                  <span className="lineage__relation">의 {wedding.families.bride.relation}</span>
-                  <strong className="lineage__name">{wedding.families.bride.fullName}</strong>
-                </li>
-              </ul>
-              <p>{wedding.copy.invitation}</p>
-            </div>
-            <div className="timeline" aria-label="우리 이야기">
-              {wedding.timeline.map((item) => (
-                <article className="timeline__item" key={item.title}>
-                  <time>{item.date}</time>
-                  <h3>{item.title}</h3>
-                  <p>{item.body}</p>
-                </article>
-              ))}
-            </div>
-          </div>
         </section>
 
         <section className="section section--gallery" id="gallery">

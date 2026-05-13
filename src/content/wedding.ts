@@ -5,12 +5,6 @@ export type GalleryImage = {
   caption: string;
 };
 
-export type TimelineItem = {
-  date: string;
-  title: string;
-  body: string;
-};
-
 export type FamilyLine = {
   father: string;
   mother: string;
@@ -108,23 +102,6 @@ export const wedding = {
       },
     ] satisfies GalleryImage[],
   },
-  timeline: [
-    {
-      date: '2019',
-      title: '처음 만난 날',
-      body: '서툰 인사와 긴 대화가 자연스럽게 다음 약속으로 이어졌습니다.',
-    },
-    {
-      date: '2023',
-      title: '서로의 일상',
-      body: '좋아하는 것과 어려운 날들을 함께 나누는 사이가 되었습니다.',
-    },
-    {
-      date: '2026',
-      title: '결혼식',
-      body: '이제 한 가족으로 시작하는 첫날을 여러분과 함께하고 싶습니다.',
-    },
-  ] satisfies TimelineItem[],
   accounts: {
     groom: [
       { role: '신랑 아버지', name: '김형찬', bank: '신한은행', number: '110-013-712418' },

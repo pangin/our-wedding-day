@@ -196,10 +196,19 @@ button {
 }
 
 .opening-copy h1 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.36em;
+  flex-wrap: wrap;
   font-family: var(--font-display);
   font-size: 5rem;
   font-weight: 400;
   line-height: 1.04;
+}
+
+.opening-copy h1 svg {
+  color: rgba(255, 250, 242, 0.78);
 }
 
 .opening-copy span {
@@ -288,13 +297,16 @@ button {
 }
 
 .invitation-card__names {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
   color: var(--rose);
   font-family: var(--font-display);
   font-size: 1.8rem;
   font-weight: 400;
 }
 
-.invitation-card__names span {
+.invitation-card__names svg {
   color: var(--gold);
 }
 
@@ -467,7 +479,6 @@ button {
 .section-copy p:not(.eyebrow),
 .event-card p,
 .venue-details,
-.timeline p,
 .guestbook-panel p,
 .comment-card p,
 .admin-comment p {
@@ -475,7 +486,6 @@ button {
   line-height: 1.75;
 }
 
-.intro-layout,
 .gallery-layout,
 .venue-layout,
 .guestbook-grid,
@@ -484,17 +494,6 @@ button {
   gap: clamp(26px, 5vw, 72px);
 }
 
-.intro-layout {
-  grid-template-columns: minmax(0, 0.92fr) minmax(320px, 1.08fr);
-  align-items: start;
-}
-
-.timeline {
-  display: grid;
-  gap: 12px;
-}
-
-.timeline__item,
 .guestbook-panel,
 .comment-card,
 .event-card,
@@ -505,24 +504,6 @@ button {
   border-radius: 8px;
   background: rgba(255, 250, 242, 0.72);
   box-shadow: var(--shadow);
-}
-
-.timeline__item {
-  padding: 22px;
-}
-
-.timeline__item time {
-  color: var(--rose);
-  font-weight: 800;
-}
-
-.timeline__item h3 {
-  margin: 9px 0 4px;
-  font-size: 1.12rem;
-}
-
-.timeline__item p {
-  margin: 0;
 }
 
 .section-copy__lead {
@@ -1304,7 +1285,6 @@ button {
     flex-direction: column;
   }
 
-  .intro-layout,
   .gallery-layout,
   .venue-layout,
   .account-layout,
