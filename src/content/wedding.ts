@@ -76,6 +76,7 @@ export const wedding = {
   },
   images: {
     hero: cloudinaryImage('iqjox53rjk4ax7oa3avb', 'f_auto,q_auto,w_2400'),
+    heroCard: cloudinaryImage('iqjox53rjk4ax7oa3avb', 'f_auto,q_auto,w_1600,ar_16:10,c_fill,g_auto:faces'),
     gallery: [
       {
         id: 'bench',

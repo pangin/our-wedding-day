@@ -38,6 +38,13 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 76px;
+}
+
+@media (max-width: 920px) {
+  html {
+    scroll-padding-top: 116px;
+  }
 }
 
 body {
@@ -131,9 +138,9 @@ button {
 
 .invitation-intro {
   position: relative;
-  min-height: 260svh;
-  background: #181512;
-  color: #fffaf2;
+  min-height: 200svh;
+  background: var(--paper);
+  color: var(--ink);
 }
 
 .invitation-stage {
@@ -146,101 +153,20 @@ button {
   perspective: 1400px;
 }
 
-.invitation-backdrop,
-.invitation-backdrop__shade {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.invitation-backdrop {
-  opacity: var(--backdrop-opacity);
-  object-fit: cover;
-  object-position: 50% 38%;
-  transform: scale(var(--backdrop-scale));
-  filter: saturate(0.82) contrast(1.02) blur(var(--backdrop-blur));
-}
-
-.invitation-backdrop__shade {
-  background:
-    radial-gradient(circle at 50% 30%, rgba(255, 250, 242, 0.22), rgba(24, 21, 18, 0) 38%),
-    linear-gradient(180deg, rgba(24, 21, 18, 0.24), rgba(24, 21, 18, 0.9)),
-    linear-gradient(90deg, rgba(24, 21, 18, 0.78), rgba(24, 21, 18, 0.38));
-}
-
-.opening-copy {
-  position: relative;
-  z-index: 2;
-  display: grid;
-  max-width: min(720px, calc(100% - 42px));
-  justify-items: center;
-  gap: 12px;
-  color: #fffaf2;
-  text-align: center;
-  transform: translateY(var(--opening-y));
-  opacity: var(--opening-opacity);
-}
-
-.opening-copy p,
-.opening-copy h1,
-.opening-copy span {
-  margin: 0;
-}
-
-.opening-copy p {
-  color: rgba(255, 250, 242, 0.7);
-  font-size: 0.88rem;
-  font-weight: 800;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
-
-.opening-copy h1 {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.36em;
-  flex-wrap: wrap;
-  font-family: var(--font-display);
-  font-size: 5rem;
-  font-weight: 400;
-  line-height: 1.04;
-}
-
-.opening-copy h1 svg {
-  color: rgba(255, 250, 242, 0.78);
-}
-
-.opening-copy span {
-  display: inline-flex;
-  min-height: 36px;
-  align-items: center;
-  border: 1px solid rgba(255, 250, 242, 0.32);
-  border-radius: 999px;
-  padding: 0 14px;
-  background: rgba(255, 250, 242, 0.12);
-  color: rgba(255, 250, 242, 0.82);
-  backdrop-filter: blur(12px);
-}
-
 .invitation-card {
-  position: absolute;
+  position: relative;
   z-index: 3;
-  left: 50%;
-  bottom: 8svh;
   display: grid;
   width: min(var(--card-width), calc(100% - 32px));
   min-height: min(var(--card-min-height), calc(100svh - 140px));
   overflow: hidden;
-  transform: translateX(-50%) translateY(var(--card-y)) scale(var(--card-scale));
-  transform-origin: center bottom;
-  border: 1px solid rgba(255, 250, 242, 0.78);
+  transform: translateY(var(--card-y)) scale(var(--card-scale));
+  transform-origin: center;
+  border: 1px solid var(--line);
   border-radius: 18px;
-  background: rgba(255, 250, 242, 0.94);
-  box-shadow: 0 28px 70px rgba(22, 17, 13, 0.32);
-  opacity: var(--card-opacity);
-  will-change: width, min-height, transform, opacity;
+  background: var(--paper-strong);
+  box-shadow: 0 30px 80px rgba(22, 17, 13, 0.18);
+  will-change: width, min-height, transform;
 }
 
 .invitation-card__media {
@@ -248,7 +174,7 @@ button {
   overflow: hidden;
   aspect-ratio: 16 / 10;
   min-height: 250px;
-  background: #251f1b;
+  background: #efe5d6;
 }
 
 .invitation-card__photo {
@@ -257,10 +183,8 @@ button {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 85% 35%;
-  opacity: var(--photo-opacity);
-  transform: scale(var(--photo-scale));
-  will-change: transform, opacity;
+  object-position: center;
+  will-change: transform;
 }
 
 .invitation-card__body {
@@ -269,15 +193,21 @@ button {
   display: grid;
   gap: 10px;
   padding: 24px;
-  background: rgba(255, 250, 242, 0.94);
+  background: var(--paper-strong);
   color: var(--ink);
-  transform: translateY(var(--copy-y));
-  opacity: var(--copy-opacity);
+}
+
+.invitation-card__eyebrow {
+  margin: 0;
+  color: var(--gold);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
 .invitation-intro--opened .invitation-card {
-  border-radius: 12px;
-  box-shadow: 0 36px 120px rgba(14, 11, 9, 0.38);
+  box-shadow: 0 36px 120px rgba(14, 11, 9, 0.22);
 }
 
 .invitation-card__date,
@@ -291,6 +221,8 @@ button {
   color: var(--gold);
   font-size: 0.86rem;
   font-weight: 800;
+  opacity: var(--copy-opacity);
+  transform: translateY(var(--copy-y));
 }
 
 .invitation-card h1 {
@@ -321,6 +253,8 @@ button {
   color: var(--muted);
   font-size: 0.98rem;
   line-height: 1.75;
+  opacity: var(--copy-opacity);
+  transform: translateY(var(--copy-y));
 }
 
 .invitation-card__details {
@@ -353,22 +287,24 @@ button {
   border-color: var(--line);
   background: rgba(37, 31, 27, 0.08);
   color: var(--ink);
+  opacity: var(--details-opacity);
 }
 
 .intro-next {
-  position: absolute;
+  position: sticky;
   z-index: 8;
-  bottom: 18px;
+  bottom: 24px;
   left: 50%;
   display: grid;
   width: 42px;
   height: 42px;
+  margin: -42px auto 28px;
   place-items: center;
-  transform: translateX(-50%);
-  border: 1px solid rgba(255, 250, 242, 0.48);
+  border: 1px solid var(--line);
   border-radius: 50%;
-  background: rgba(37, 31, 27, 0.32);
-  color: #fffaf2;
+  background: rgba(255, 250, 242, 0.78);
+  color: var(--ink);
+  box-shadow: var(--shadow);
 }
 
 .event-card__actions,
@@ -522,6 +458,8 @@ button {
   color: var(--muted);
   font-size: 0.94rem;
   line-height: 1.55;
+  opacity: var(--copy-opacity);
+  transform: translateY(var(--copy-y));
 }
 
 .invitation-card__lineage li {
@@ -1449,8 +1387,12 @@ button {
 
 @media (min-width: 920px) {
   .invitation-card {
-    grid-template-columns: minmax(0, 1.03fr) minmax(360px, 0.97fr);
+    grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
     align-items: stretch;
+  }
+
+  .invitation-card__media {
+    aspect-ratio: auto;
   }
 
   .invitation-card__body {
@@ -1520,13 +1462,12 @@ button {
   }
 
   .invitation-intro {
-    min-height: 245svh;
+    min-height: 180svh;
   }
 
   .invitation-card {
-    bottom: 16px;
-    width: 82%;
-    min-height: min(var(--card-min-height), calc(100svh - 110px));
+    width: min(var(--card-width), calc(100% - 22px));
+    min-height: min(var(--card-min-height), calc(100svh - 130px));
   }
 
   .invitation-card__body {
@@ -1541,22 +1482,8 @@ button {
     font-size: 1.62rem;
   }
 
-  .invitation-intro--opened .invitation-card {
-    grid-template-columns: 1fr;
-    width: min(560px, calc(100% - 22px));
-  }
-
-  .opening-copy h1 {
-    font-size: 3.35rem;
-  }
-
-  .invitation-intro--opened .invitation-card__photo {
+  .invitation-card__media {
     max-height: 42svh;
-  }
-
-  .invitation-intro--opened .invitation-card__body {
-    gap: 12px;
-    padding: 22px 22px 66px;
   }
 
   .gallery-strip {
