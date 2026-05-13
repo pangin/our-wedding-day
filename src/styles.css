@@ -231,7 +231,7 @@ button {
   bottom: 8svh;
   display: grid;
   width: min(var(--card-width), calc(100% - 32px));
-  min-height: min(var(--card-min-height), calc(100svh - 104px));
+  min-height: min(var(--card-min-height), calc(100svh - 140px));
   overflow: hidden;
   transform: translateX(-50%) translateY(var(--card-y)) scale(var(--card-scale));
   transform-origin: center bottom;
@@ -1524,7 +1524,7 @@ button {
   .invitation-card {
     bottom: 16px;
     width: 82%;
-    min-height: min(var(--card-min-height), calc(100svh - 76px));
+    min-height: min(var(--card-min-height), calc(100svh - 110px));
   }
 
   .invitation-card__body {
