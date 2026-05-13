@@ -13,6 +13,7 @@ import {
   Share2,
 } from 'lucide-react';
 import { AdminPanel } from './components/AdminPanel';
+import { Gallery } from './components/Gallery';
 import { Guestbook } from './components/Guestbook';
 import { MapEmbed } from './components/MapEmbed';
 import { MapPickerDialog } from './components/MapPickerDialog';
@@ -53,7 +54,6 @@ export function App() {
   const [invitationState, setInvitationState] = useState<InvitationState>('ready');
   const [introProgress, setIntroProgress] = useState(0);
   const [isMusicOn, setIsMusicOn] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(wedding.images.gallery[0]);
   const [copyStatus, setCopyStatus] = useState('');
   const [isMapPickerOpen, setIsMapPickerOpen] = useState(false);
 
@@ -296,25 +296,7 @@ export function App() {
               <h2>기억하고 싶은 장면들</h2>
               <p>가장 우리다운 순간들을 천천히 넘겨 보세요.</p>
             </div>
-            <div className="gallery-stage">
-              <figure>
-                <img src={selectedImage.src} alt={selectedImage.alt} />
-                <figcaption>{selectedImage.caption}</figcaption>
-              </figure>
-              <div className="gallery-strip" aria-label="갤러리 사진 선택">
-                {wedding.images.gallery.map((image) => (
-                  <button
-                    className={image.id === selectedImage.id ? 'is-selected' : ''}
-                    key={image.id}
-                    type="button"
-                    onClick={() => setSelectedImage(image)}
-                    aria-label={`${image.caption} 보기`}
-                  >
-                    <img src={image.src} alt="" />
-                  </button>
-                ))}
-              </div>
-            </div>
+            <Gallery images={wedding.images.gallery} />
           </div>
         </section>
 
