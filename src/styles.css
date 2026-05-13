@@ -506,49 +506,6 @@ button {
   box-shadow: var(--shadow);
 }
 
-.section-copy__lead {
-  margin: 0 0 18px;
-  color: var(--ink);
-  font-size: 1.05rem;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-}
-
-.lineage {
-  display: grid;
-  gap: 6px;
-  margin: 0 0 22px;
-  padding: 18px 20px;
-  list-style: none;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: rgba(255, 250, 242, 0.6);
-}
-
-.lineage li {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 4px 8px;
-  color: var(--muted);
-  font-size: 0.98rem;
-  line-height: 1.6;
-}
-
-.lineage__parents {
-  letter-spacing: 0.01em;
-}
-
-.lineage__relation {
-  color: var(--muted);
-}
-
-.lineage__name {
-  color: var(--ink);
-  font-weight: 800;
-  font-size: 1.06rem;
-}
-
 .invitation-card__lineage {
   display: grid;
   gap: 4px;

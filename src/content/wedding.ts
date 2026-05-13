@@ -65,7 +65,6 @@ export const wedding = {
   copy: {
     opening:
       '서로의 계절을 오래 바라보다가, 이제 같은 계절을 함께 걸어가려 합니다.',
-    invitationLead: '두 사람이 사랑으로 만나, 이제 한 가정을 이루려 합니다.',
     invitation:
       '바쁘신 가운데 시간 내어 축복해 주시면 큰 기쁨이 되겠습니다. 두 사람의 첫걸음에 함께해 주세요.',
     accountsHeading: '마음 전하실 곳',
