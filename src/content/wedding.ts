@@ -74,7 +74,7 @@ export const wedding = {
     footer: '멀리서 전해주시는 마음도 깊이 간직하겠습니다.',
   },
   images: {
-    hero: cloudinaryImage('iqjox53rjk4ax7oa3avb', 'f_auto,q_auto,w_2200'),
+    hero: cloudinaryImage('iqjox53rjk4ax7oa3avb', 'f_auto,q_auto,w_2200,h_1375,c_fill,g_auto:faces'),
     gallery: [
       {
         id: 'bench',
