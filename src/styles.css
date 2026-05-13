@@ -148,9 +148,16 @@ button {
   top: 0;
   display: grid;
   min-height: 100svh;
+  padding: 76px 0 28px;
   place-items: center;
   overflow: hidden;
   perspective: 1400px;
+}
+
+@media (max-width: 920px) {
+  .invitation-stage {
+    padding: 116px 0 32px;
+  }
 }
 
 .invitation-backdrop,
