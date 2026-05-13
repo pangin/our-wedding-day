@@ -380,18 +380,18 @@ button {
 }
 
 .intro-next {
-  position: sticky;
+  position: absolute;
   z-index: 8;
-  bottom: 24px;
+  bottom: 18px;
   left: 50%;
   display: grid;
   width: 42px;
   height: 42px;
-  margin: -42px auto 28px;
   place-items: center;
-  border: 1px solid rgba(255, 250, 242, 0.4);
+  transform: translateX(-50%);
+  border: 1px solid rgba(255, 250, 242, 0.48);
   border-radius: 50%;
-  background: rgba(37, 31, 27, 0.42);
+  background: rgba(37, 31, 27, 0.32);
   color: #fffaf2;
   backdrop-filter: blur(10px);
 }
@@ -1573,6 +1573,11 @@ button {
 
   .invitation-card__media {
     max-height: 42svh;
+  }
+
+  .opening-copy h1 {
+    flex-wrap: nowrap;
+    font-size: 3.35rem;
   }
 
   .gallery-strip {
