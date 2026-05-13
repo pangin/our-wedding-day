@@ -73,31 +73,25 @@ export const wedding = {
     footer: '멀리서 전해주시는 마음도 깊이 간직하겠습니다.',
   },
   images: {
-    hero: cloudinaryImage('sample', 'f_auto,q_auto,w_2200'),
+    hero: cloudinaryImage('wedding-2026/iqjox53rjk4ax7oa3avb', 'f_auto,q_auto,w_2200'),
     gallery: [
       {
-        id: 'walk',
-        src: cloudinaryImage('sample', 'f_auto,q_auto,w_1400,h_1750,c_fill'),
-        alt: '햇살 아래 함께 걷는 커플',
+        id: 'moment-1',
+        src: cloudinaryImage('wedding-2026/iqjox53rjk4ax7oa3avb', 'f_auto,q_auto,w_1400,h_1750,c_fill'),
+        alt: '벤치에 함께 앉은 신랑 신부',
+        caption: '함께한 순간',
+      },
+      {
+        id: 'moment-2',
+        src: cloudinaryImage('wedding-2026/hcyzevnmc4hadruvnv3q', 'f_auto,q_auto,w_1400,h_1750,c_fill'),
+        alt: '햇살 아래 신랑 신부',
+        caption: '눈부신 봄날',
+      },
+      {
+        id: 'moment-3',
+        src: cloudinaryImage('wedding-2026/tlbmdtbz0nldzkmpa9w9', 'f_auto,q_auto,w_1400,h_1750,c_fill'),
+        alt: '베일 아래 신랑 신부',
         caption: '함께 걷는 길',
-      },
-      {
-        id: 'hands',
-        src: cloudinaryImage('woman', 'f_auto,q_auto,w_1400,h_1750,c_fill'),
-        alt: '손을 맞잡은 커플',
-        caption: '작은 약속',
-      },
-      {
-        id: 'bouquet',
-        src: cloudinaryImage('coffee', 'f_auto,q_auto,w_1400,h_1750,c_fill'),
-        alt: '웨딩 플라워와 예식 공간',
-        caption: '기억하고 싶은 순간',
-      },
-      {
-        id: 'table',
-        src: cloudinaryImage('balloons', 'f_auto,q_auto,w_1400,h_1750,c_fill'),
-        alt: '따뜻한 분위기의 웨딩 테이블',
-        caption: '따뜻한 축하',
       },
     ] satisfies GalleryImage[],
   },
