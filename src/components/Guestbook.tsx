@@ -4,6 +4,7 @@ import { Edit3, LogIn, LogOut, Send, Sparkles } from 'lucide-react';
 import { TurnstileWidget } from './TurnstileWidget';
 import { validateGuestbookMessage } from '../lib/commentPolicy';
 import { consumeKakaoCallback, redirectToKakaoLogin } from '../lib/kakao';
+import { consumeNaverCallback, redirectToNaverLogin } from '../lib/naver';
 import {
   isSupabaseConfigured,
   supabase,
@@ -151,6 +152,36 @@ export function Guestbook({ onNotice }: GuestbookProps) {
         }
       }
 
+      try {
+        const naverCallback = consumeNaverCallback();
+        if (naverCallback && supabase) {
+          const { data, error } = await supabase.functions.invoke<{
+            tokenHash?: string;
+            email?: string;
+            error?: string;
+          }>('naver-auth', { body: naverCallback });
+
+          if (error || data?.error) {
+            if (!cancelled) {
+              setStatusMessage(`네이버 로그인 실패: ${data?.error ?? error?.message}`);
+            }
+          } else if (data?.tokenHash) {
+            const { error: otpError } = await supabase.auth.verifyOtp({
+              token_hash: data.tokenHash,
+              type: 'magiclink',
+            });
+            if (otpError && !cancelled) {
+              setStatusMessage(`네이버 로그인 실패: ${otpError.message}`);
+            }
+          }
+        }
+      } catch (err) {
+        if (!cancelled) {
+          const msg = err instanceof Error ? err.message : '알 수 없는 오류';
+          setStatusMessage(`네이버 로그인 실패: ${msg}`);
+        }
+      }
+
       if (cancelled || !supabase) return;
       const { data } = await supabase.auth.getSession();
       if (cancelled) return;
@@ -182,7 +213,7 @@ export function Guestbook({ onNotice }: GuestbookProps) {
     }
   }, [session]);
 
-  async function signIn(provider: 'kakao' | 'google') {
+  async function signIn(provider: 'kakao' | 'google' | 'naver') {
     if (!supabase) {
       setStatusMessage('Supabase 환경 변수가 필요합니다.');
       return;
@@ -196,6 +227,16 @@ export function Guestbook({ onNotice }: GuestbookProps) {
       } catch (err) {
         const msg = err instanceof Error ? err.message : '알 수 없는 오류';
         setStatusMessage(`카카오 로그인 실패: ${msg}`);
+      }
+      return;
+    }
+
+    if (provider === 'naver') {
+      try {
+        redirectToNaverLogin();
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : '알 수 없는 오류';
+        setStatusMessage(`네이버 로그인 실패: ${msg}`);
       }
       return;
     }
@@ -349,6 +390,10 @@ export function Guestbook({ onNotice }: GuestbookProps) {
                 <button className="button" type="button" onClick={() => signIn('kakao')}>
                   <LogIn size={17} aria-hidden="true" />
                   Kakao
+                </button>
+                <button className="button button--ghost" type="button" onClick={() => signIn('naver')}>
+                  <LogIn size={17} aria-hidden="true" />
+                  Naver
                 </button>
                 <button className="button button--ghost" type="button" onClick={() => signIn('google')}>
                   <LogIn size={17} aria-hidden="true" />
