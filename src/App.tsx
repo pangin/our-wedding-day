@@ -532,7 +532,7 @@ export function App() {
           </div>
         </section>
 
-        <Guestbook />
+        <Guestbook onNotice={showNotice} />
 
         <section className="section section--share" id="share">
           <div className="section__inner share-layout">

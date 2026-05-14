@@ -72,6 +72,11 @@ export const wedding = {
     accountsHeading: '마음 전하실 곳',
     accountsNote:
       '축하의 자리에 직접 오시기 어려운 분들을 위해 계좌번호를 함께 안내드립니다. 보내주시는 마음, 오래도록 간직하겠습니다.',
+    guestbookHeading: '참석 여부와 축하 메시지',
+    guestbookSubcopy:
+      '소중한 자리에 함께해 주실 분들의 응답을 기다리고 있어요. 축하 메시지도 함께 남겨 주세요.',
+    rsvpDeadlineNotice: '6월 26일까지 응답 부탁드립니다.',
+    rsvpClosedNotice: '응답이 마감되었습니다. 신랑·신부에게 직접 연락 주세요.',
     footer: '멀리서 전해주시는 마음도 깊이 간직하겠습니다.',
   },
   images: {

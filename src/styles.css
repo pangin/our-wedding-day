@@ -1423,6 +1423,215 @@ button {
   min-height: 65px;
 }
 
+.rsvp-deadline {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-weight: 600;
+  flex-wrap: wrap;
+}
+
+.rsvp-deadline-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 0 11px;
+  border-radius: 999px;
+  background: rgba(168, 118, 44, 0.16);
+  color: var(--gold);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.rsvp-deadline-pill--urgent {
+  background: rgba(184, 87, 87, 0.16);
+  color: var(--rose);
+}
+
+.rsvp-field {
+  display: grid;
+  gap: 6px;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.rsvp-field > legend {
+  padding: 0;
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.rsvp-field input[type='text'],
+.rsvp-field input[type='tel'],
+.rsvp-field select {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.74);
+  color: var(--ink);
+  font: inherit;
+}
+
+.rsvp-field input[type='text']:focus,
+.rsvp-field input[type='tel']:focus,
+.rsvp-field select:focus {
+  border-color: var(--gold);
+  outline: 3px solid rgba(168, 118, 44, 0.16);
+}
+
+.rsvp-radio-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.rsvp-radio {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 92px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.74);
+  color: var(--ink);
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.16s ease, background 0.16s ease, color 0.16s ease;
+  flex: 1 1 auto;
+}
+
+.rsvp-radio:hover {
+  border-color: var(--gold);
+}
+
+.rsvp-radio input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.rsvp-radio.is-active {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper-strong);
+}
+
+.rsvp-divider {
+  width: 100%;
+  height: 1px;
+  border: 0;
+  background: var(--line);
+  margin: 6px 0 0;
+}
+
+.rsvp-summary-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.74);
+  padding: 18px;
+  display: grid;
+  gap: 10px;
+}
+
+.rsvp-summary-card .eyebrow {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.rsvp-summary-card dl {
+  display: grid;
+  grid-template-columns: minmax(72px, auto) 1fr;
+  column-gap: 18px;
+  row-gap: 6px;
+  margin: 0;
+}
+
+.rsvp-summary-card dt {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.rsvp-summary-card dd {
+  margin: 0;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.admin-panel__tabs {
+  display: flex;
+  gap: 6px;
+  padding: 12px 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-tab {
+  padding: 8px 14px;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: -1px;
+}
+
+.admin-tab.is-active {
+  border-color: var(--line);
+  background: var(--paper-strong);
+  color: var(--ink);
+}
+
+.admin-rsvp-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-rsvp-summary > div {
+  display: grid;
+  gap: 2px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.admin-rsvp-summary dt {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.admin-rsvp-summary dd {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.admin-rsvp-contact {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
 .form-status,
 .empty-comments {
   margin: 0;
