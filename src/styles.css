@@ -1424,11 +1424,45 @@ button {
 }
 
 .form-status,
-.empty-comments,
-.copy-toast {
+.empty-comments {
   margin: 0;
   color: var(--rose);
   font-weight: 700;
+}
+
+.copy-toast {
+  position: fixed;
+  left: 50%;
+  bottom: max(28px, env(safe-area-inset-bottom, 0px) + 20px);
+  z-index: 1200;
+  margin: 0;
+  padding: 12px 22px;
+  max-width: min(420px, calc(100vw - 32px));
+  border-radius: 999px;
+  background: rgba(37, 31, 27, 0.92);
+  color: #fffaf2;
+  font-size: 0.94rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-align: center;
+  box-shadow: 0 18px 42px rgba(14, 11, 9, 0.32);
+  backdrop-filter: blur(16px);
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 12px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.copy-toast[data-visible='true'] {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copy-toast {
+    transition: opacity 0.12s linear;
+    transform: translate(-50%, 0);
+  }
 }
 
 .comments-list {

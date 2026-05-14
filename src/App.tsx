@@ -121,9 +121,11 @@ export function App() {
     [],
   );
 
+  const toastTimerRef = useRef(0);
   function showNotice(message: string) {
     setCopyStatus(message);
-    window.setTimeout(() => setCopyStatus(''), 2200);
+    window.clearTimeout(toastTimerRef.current);
+    toastTimerRef.current = window.setTimeout(() => setCopyStatus(''), 2400);
   }
 
   const eventDate = useMemo(() => new Date(wedding.event.date), []);
@@ -214,8 +216,7 @@ export function App() {
 
   async function copyAddress() {
     await navigator.clipboard.writeText(`${wedding.event.venue} ${wedding.event.address}`);
-    setCopyStatus('주소가 복사되었습니다.');
-    window.setTimeout(() => setCopyStatus(''), 2200);
+    showNotice('주소가 복사되었습니다.');
   }
 
   async function copyAccount(account: { name: string; bank: string; number: string }) {
@@ -239,8 +240,7 @@ export function App() {
     }
 
     await navigator.clipboard.writeText(url);
-    setCopyStatus('초대장 링크가 복사되었습니다.');
-    window.setTimeout(() => setCopyStatus(''), 2200);
+    showNotice('초대장 링크가 복사되었습니다.');
   }
 
   function replayInvitation() {
@@ -529,7 +529,6 @@ export function App() {
                 </details>
               ))}
             </div>
-            {copyStatus ? <p className="copy-toast">{copyStatus}</p> : null}
           </div>
         </section>
 
@@ -559,10 +558,18 @@ export function App() {
                 청첩장 다시 넣기
               </button>
             </div>
-            {copyStatus ? <p className="copy-toast">{copyStatus}</p> : null}
           </div>
         </section>
       </main>
+
+      <div
+        className="copy-toast"
+        role="status"
+        aria-live="polite"
+        data-visible={copyStatus ? 'true' : 'false'}
+      >
+        {copyStatus}
+      </div>
 
       {isAdmin ? <AdminPanel onClose={() => (window.location.hash = '#guestbook')} /> : null}
     </>
