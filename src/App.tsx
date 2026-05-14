@@ -237,6 +237,38 @@ export function App() {
                 {wedding.couple.bride}
               </h1>
               <span>스크롤해서 초대장을 펼쳐보세요</span>
+              <span className="opening-gesture" aria-hidden="true">
+                <svg viewBox="0 0 40 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect
+                    x="11"
+                    y="3"
+                    width="18"
+                    height="32"
+                    rx="9"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                  />
+                  <line
+                    className="opening-gesture__dot"
+                    x1="20"
+                    y1="11"
+                    x2="20"
+                    y2="17"
+                    stroke="currentColor"
+                    strokeWidth="2.4"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    className="opening-gesture__arrow"
+                    d="M14 42 L20 49 L26 42"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    fill="none"
+                  />
+                </svg>
+              </span>
             </div>
             <article className="invitation-card" aria-label="성욱과 혜경의 청첩장">
               <div className="invitation-card__media">
