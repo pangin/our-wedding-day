@@ -5,6 +5,9 @@ on:
     branches:
       - main
   workflow_dispatch:
+  schedule:
+    # 매일 KST 00:05 (UTC 15:05) — RSVP 마감 자동 잠금 + 일별 보정
+    - cron: '5 15 * * *'
 
 permissions:
   contents: read
@@ -40,6 +43,30 @@ jobs:
       - name: Test
         run: npm test
 
+      - name: Resolve RSVP closed flag
+        id: rsvp
+        # 빌드 시점에 한 번만 결정 → 결과는 빌드 결과물에 박혀서 클라이언트가 조작 불가
+        # 1) 시크릿 RSVP_FORCE_CLOSED='true' → 강제 마감
+        # 2) 시크릿 RSVP_DEADLINE_UTC ISO 시각이 지났으면 자동 마감
+        # 3) 시크릿이 비어 있으면 기본값 2026-06-26T14:59:59Z (KST 자정)
+        env:
+          OVERRIDE: ${{ secrets.RSVP_FORCE_CLOSED }}
+          DEADLINE_INPUT: ${{ secrets.RSVP_DEADLINE_UTC }}
+        run: |
+          DEADLINE="${DEADLINE_INPUT:-2026-06-26T14:59:59Z}"
+          if [ "$OVERRIDE" = "true" ]; then
+            CLOSED=true
+            REASON="secret override"
+          elif [ "$(date -u +%s)" -gt "$(date -u -d "$DEADLINE" +%s)" ]; then
+            CLOSED=true
+            REASON="past deadline ($DEADLINE)"
+          else
+            CLOSED=false
+            REASON="before deadline ($DEADLINE)"
+          fi
+          echo "closed=$CLOSED" >> "$GITHUB_OUTPUT"
+          echo "RSVP closed=$CLOSED ($REASON)"
+
       - name: Build
         run: npm run build
         env:
@@ -48,6 +75,7 @@ jobs:
           VITE_TURNSTILE_SITE_KEY: ${{ secrets.VITE_TURNSTILE_SITE_KEY }}
           VITE_CLOUDINARY_CLOUD_NAME: ${{ secrets.VITE_CLOUDINARY_CLOUD_NAME }}
           VITE_KAKAO_MAP_KEY: ${{ secrets.VITE_KAKAO_MAP_KEY }}
+          VITE_RSVP_CLOSED: ${{ steps.rsvp.outputs.closed }}
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

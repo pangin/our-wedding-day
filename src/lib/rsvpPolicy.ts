@@ -1,5 +1,7 @@
 export const RSVP_DEADLINE_UTC = new Date('2026-06-26T14:59:59Z');
 
+const FORCE_CLOSED = import.meta.env.VITE_RSVP_CLOSED === 'true';
+
 export const RSVP_LIMITS = {
   name: 20,
   contact: 30,
@@ -104,10 +106,11 @@ export function validateRsvpPayload(input: unknown): RsvpValidation {
 }
 
 export function isRsvpClosed(now: number = Date.now()): boolean {
-  return now > RSVP_DEADLINE_UTC.getTime();
+  return FORCE_CLOSED || now > RSVP_DEADLINE_UTC.getTime();
 }
 
 export function rsvpDaysLeft(now: number = Date.now()): number {
+  if (FORCE_CLOSED) return 0;
   const diff = RSVP_DEADLINE_UTC.getTime() - now;
   if (diff <= 0) return 0;
   return Math.ceil(diff / 86_400_000);
