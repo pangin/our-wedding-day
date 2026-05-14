@@ -60,6 +60,7 @@ export function App() {
     if (typeof window === 'undefined') return false;
     return window.matchMedia('(hover: none) and (pointer: coarse)').matches;
   });
+  const autoOpenedRef = useRef(false);
 
   useEffect(() => {
     const mq = window.matchMedia('(hover: none) and (pointer: coarse)');
@@ -67,6 +68,48 @@ export function App() {
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
   }, []);
+
+  useEffect(() => {
+    if (invitationState !== 'ready') return;
+    if (autoOpenedRef.current) return;
+    if (window.scrollY > 4) return;
+
+    const events: Array<keyof WindowEventMap> = [
+      'wheel',
+      'touchstart',
+      'pointerdown',
+      'keydown',
+      'scroll',
+    ];
+
+    let timer = 0;
+    const cancel = () => {
+      autoOpenedRef.current = true;
+      window.clearTimeout(timer);
+      detach();
+    };
+    const detach = () => {
+      events.forEach((name) => window.removeEventListener(name, cancel));
+    };
+
+    timer = window.setTimeout(() => {
+      detach();
+      const intro = introRef.current;
+      if (!intro) return;
+      autoOpenedRef.current = true;
+      const rect = intro.getBoundingClientRect();
+      const introTop = rect.top + window.scrollY;
+      const target = introTop + Math.max(0, rect.height - window.innerHeight);
+      window.scrollTo({ top: target, behavior: 'smooth' });
+    }, 10000);
+
+    events.forEach((name) => window.addEventListener(name, cancel, { passive: true }));
+
+    return () => {
+      window.clearTimeout(timer);
+      detach();
+    };
+  }, [invitationState]);
 
   const venueLocation = useMemo<Venue>(
     () => ({
