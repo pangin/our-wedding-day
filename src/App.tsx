@@ -258,7 +258,11 @@ export function App() {
 
   return (
     <>
-      <header className="site-nav" aria-label="청첩장 바로가기">
+      <header
+        className={`site-nav site-nav--${invitationState}`}
+        aria-label="청첩장 바로가기"
+        aria-hidden={invitationState !== 'opened'}
+      >
         <a className="site-nav__brand" href="#home" aria-label="처음으로">
           {wedding.couple.groom}
           <Heart size={14} aria-hidden="true" />

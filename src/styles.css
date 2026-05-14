@@ -90,12 +90,37 @@ button {
   justify-content: space-between;
   gap: 14px;
   padding: 10px 14px;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
   border: 1px solid rgba(255, 250, 242, 0.68);
   border-radius: 0 0 8px 8px;
   background: rgba(37, 31, 27, 0.58);
   color: #fffaf2;
   backdrop-filter: blur(16px);
+  transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.site-nav--opened {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+  transition: opacity 0.55s ease 0.18s,
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.12s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-nav,
+  .site-nav--opened {
+    transition: opacity 0.18s linear;
+    transform: translateX(-50%) translateY(0);
+  }
+  .site-nav {
+    opacity: 0;
+  }
+  .site-nav--opened {
+    opacity: 1;
+  }
 }
 
 .site-nav__brand,
