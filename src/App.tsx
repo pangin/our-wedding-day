@@ -56,6 +56,17 @@ export function App() {
   const [isMusicOn, setIsMusicOn] = useState(false);
   const [copyStatus, setCopyStatus] = useState('');
   const [isMapPickerOpen, setIsMapPickerOpen] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+  });
+
+  useEffect(() => {
+    const mq = window.matchMedia('(hover: none) and (pointer: coarse)');
+    const handler = (event: MediaQueryListEvent) => setIsTouchDevice(event.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   const venueLocation = useMemo<Venue>(
     () => ({
@@ -236,38 +247,76 @@ export function App() {
                 <Heart size={42} aria-hidden="true" strokeWidth={1.5} />
                 {wedding.couple.bride}
               </h1>
-              <span>스크롤해서 초대장을 펼쳐보세요</span>
+              <span>
+                {isTouchDevice ? '손가락으로 밀어서 초대장을 펼쳐보세요' : '스크롤해서 초대장을 펼쳐보세요'}
+              </span>
               <span className="opening-gesture" aria-hidden="true">
-                <svg viewBox="0 0 40 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect
-                    x="11"
-                    y="3"
-                    width="18"
-                    height="32"
-                    rx="9"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                  />
-                  <line
-                    className="opening-gesture__dot"
-                    x1="20"
-                    y1="11"
-                    x2="20"
-                    y2="17"
-                    stroke="currentColor"
-                    strokeWidth="2.4"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    className="opening-gesture__arrow"
-                    d="M14 42 L20 49 L26 42"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    fill="none"
-                  />
-                </svg>
+                {isTouchDevice ? (
+                  <svg viewBox="0 0 40 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g className="opening-gesture__touch">
+                      <circle
+                        cx="20"
+                        cy="9"
+                        r="6"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        fill="rgba(255, 250, 242, 0.14)"
+                      />
+                      <circle cx="20" cy="9" r="2" fill="currentColor" />
+                    </g>
+                    <line
+                      x1="20"
+                      y1="22"
+                      x2="20"
+                      y2="36"
+                      stroke="currentColor"
+                      strokeWidth="1.4"
+                      strokeDasharray="2 3"
+                      strokeLinecap="round"
+                      opacity="0.55"
+                    />
+                    <path
+                      className="opening-gesture__arrow"
+                      d="M14 42 L20 49 L26 42"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      fill="none"
+                    />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 40 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect
+                      x="11"
+                      y="3"
+                      width="18"
+                      height="32"
+                      rx="9"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                    />
+                    <line
+                      className="opening-gesture__dot"
+                      x1="20"
+                      y1="11"
+                      x2="20"
+                      y2="17"
+                      stroke="currentColor"
+                      strokeWidth="2.4"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      className="opening-gesture__arrow"
+                      d="M14 42 L20 49 L26 42"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      fill="none"
+                    />
+                  </svg>
+                )}
               </span>
             </div>
             <article className="invitation-card" aria-label="성욱과 혜경의 청첩장">

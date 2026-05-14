@@ -262,6 +262,11 @@ button {
   animation: opening-gesture-dot 1.8s ease-in-out infinite;
 }
 
+.opening-gesture__touch {
+  transform-origin: 20px 9px;
+  animation: opening-gesture-touch 1.8s ease-in-out infinite;
+}
+
 .opening-gesture__arrow {
   animation: opening-gesture-arrow 1.8s ease-in-out infinite;
 }
@@ -285,6 +290,25 @@ button {
   }
 }
 
+@keyframes opening-gesture-touch {
+  0%, 15% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  55% {
+    transform: translateY(20px);
+    opacity: 0.45;
+  }
+  70% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  85%, 100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 @keyframes opening-gesture-arrow {
   0%, 100% {
     transform: translateY(0);
@@ -298,6 +322,7 @@ button {
 
 @media (prefers-reduced-motion: reduce) {
   .opening-gesture__dot,
+  .opening-gesture__touch,
   .opening-gesture__arrow {
     animation: none;
   }
