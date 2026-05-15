@@ -48,6 +48,7 @@ export function Gallery({ images }: { images: readonly GalleryImage[] }) {
           <figure
             className={`gallery-slide ${i === index ? 'is-active' : ''}`}
             key={image.id}
+            data-gallery-id={image.id}
             aria-hidden={i !== index}
             onClick={() => i === index && setLightboxIndex(i)}
             onContextMenu={(event) => event.preventDefault()}

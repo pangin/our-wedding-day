@@ -99,11 +99,10 @@ export const wedding = {
       },
       {
         id: 'portrait',
-        src: cloudinaryImage('oiyo6hqj0ksvc6jzbext', 'f_auto,q_auto,w_1600'),
+        src: cloudinaryImage('oiyo6hqj0ksvc6jzbext', 'f_auto,q_auto,w_1600,h_2000,c_fill,g_faces'),
         full: cloudinaryImage('oiyo6hqj0ksvc6jzbext', 'f_auto,q_auto,w_2400,c_limit'),
         alt: '부케를 함께 든 신랑 신부 포트레이트',
         caption: '두 사람',
-        objectPosition: '45% 50%',
       },
       {
         id: 'sunlight',
