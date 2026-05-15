@@ -76,6 +76,10 @@ jobs:
           VITE_CLOUDINARY_CLOUD_NAME: ${{ secrets.VITE_CLOUDINARY_CLOUD_NAME }}
           VITE_KAKAO_MAP_KEY: ${{ secrets.VITE_KAKAO_MAP_KEY }}
           VITE_NAVER_CLIENT_ID: ${{ secrets.VITE_NAVER_CLIENT_ID }}
+          # 로그인 제공자 활성화 — 'false' 면 비활성, 그 외 빈 값/미설정은 활성 유지
+          VITE_AUTH_KAKAO_ENABLED: ${{ secrets.VITE_AUTH_KAKAO_ENABLED }}
+          VITE_AUTH_GOOGLE_ENABLED: ${{ secrets.VITE_AUTH_GOOGLE_ENABLED }}
+          VITE_AUTH_NAVER_ENABLED: ${{ secrets.VITE_AUTH_NAVER_ENABLED }}
           VITE_RSVP_CLOSED: ${{ steps.rsvp.outputs.closed }}
 
       - name: Configure Pages

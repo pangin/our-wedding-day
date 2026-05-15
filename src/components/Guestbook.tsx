@@ -5,6 +5,7 @@ import { TurnstileWidget } from './TurnstileWidget';
 import { validateGuestbookMessage } from '../lib/commentPolicy';
 import { consumeKakaoCallback, redirectToKakaoLogin } from '../lib/kakao';
 import { consumeNaverCallback, redirectToNaverLogin } from '../lib/naver';
+import { AUTH_ENABLED } from '../lib/authConfig';
 import {
   isSupabaseConfigured,
   supabase,
@@ -153,7 +154,7 @@ export function Guestbook({ onNotice }: GuestbookProps) {
       }
 
       try {
-        const naverCallback = consumeNaverCallback();
+        const naverCallback = AUTH_ENABLED.naver ? consumeNaverCallback() : null;
         if (naverCallback && supabase) {
           const { data, error } = await supabase.functions.invoke<{
             tokenHash?: string;
@@ -216,6 +217,11 @@ export function Guestbook({ onNotice }: GuestbookProps) {
   async function signIn(provider: 'kakao' | 'google' | 'naver') {
     if (!supabase) {
       setStatusMessage('Supabase 환경 변수가 필요합니다.');
+      return;
+    }
+
+    if (!AUTH_ENABLED[provider]) {
+      setStatusMessage('현재 사용할 수 없는 로그인 방법입니다.');
       return;
     }
 
@@ -387,18 +393,32 @@ export function Guestbook({ onNotice }: GuestbookProps) {
             <div className="login-box">
               <p>로그인 후 참석 여부와 축하 메시지를 남길 수 있습니다.</p>
               <div className="login-box__actions">
-                <button className="button" type="button" onClick={() => signIn('kakao')}>
-                  <LogIn size={17} aria-hidden="true" />
-                  Kakao
-                </button>
-                <button className="button button--ghost" type="button" onClick={() => signIn('naver')}>
-                  <LogIn size={17} aria-hidden="true" />
-                  Naver
-                </button>
-                <button className="button button--ghost" type="button" onClick={() => signIn('google')}>
-                  <LogIn size={17} aria-hidden="true" />
-                  Google
-                </button>
+                {AUTH_ENABLED.kakao ? (
+                  <button className="button" type="button" onClick={() => signIn('kakao')}>
+                    <LogIn size={17} aria-hidden="true" />
+                    Kakao
+                  </button>
+                ) : null}
+                {AUTH_ENABLED.naver ? (
+                  <button
+                    className="button button--ghost"
+                    type="button"
+                    onClick={() => signIn('naver')}
+                  >
+                    <LogIn size={17} aria-hidden="true" />
+                    Naver
+                  </button>
+                ) : null}
+                {AUTH_ENABLED.google ? (
+                  <button
+                    className="button button--ghost"
+                    type="button"
+                    onClick={() => signIn('google')}
+                  >
+                    <LogIn size={17} aria-hidden="true" />
+                    Google
+                  </button>
+                ) : null}
               </div>
               {statusMessage ? <p className="form-status">{statusMessage}</p> : null}
             </div>
