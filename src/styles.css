@@ -614,7 +614,6 @@ button {
 .section {
   padding: clamp(72px, 10vw, 124px) 0;
   scroll-snap-align: start;
-  scroll-snap-stop: always;
 }
 
 .section__inner {

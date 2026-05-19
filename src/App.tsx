@@ -74,14 +74,15 @@ export function App() {
     const ids = sections.map((s) => s.id);
 
     function recompute() {
-      const sentinelY = window.scrollY + 100;
+      // sentinel: viewport-relative. mobile scroll-padding-top(116px) 보다 살짝 아래로 둬야
+      // anchor 스크롤 직후 섹션 top(~116)이 sentinel 위에 위치한 것으로 판정됨.
+      const sentinel = 140;
       let nextIndex = -1;
       for (let i = 0; i < ids.length; i += 1) {
         const el = document.getElementById(ids[i]);
         if (!el) continue;
-        const top = el.offsetTop;
-        const bottom = top + el.offsetHeight;
-        if (sentinelY >= top && sentinelY < bottom) {
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= sentinel && rect.bottom > sentinel) {
           nextIndex = i;
           break;
         }
