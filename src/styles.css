@@ -39,6 +39,13 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 76px;
+  scroll-snap-type: y proximity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-snap-type: none;
+  }
 }
 
 @media (max-width: 920px) {
@@ -137,9 +144,33 @@ button {
 }
 
 .site-nav nav {
+  position: relative;
   gap: 4px;
   overflow-x: auto;
   scrollbar-width: none;
+}
+
+.site-nav__indicator {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: var(--indicator-w, 0px);
+  transform: translateX(var(--indicator-x, 0px));
+  background: rgba(255, 250, 242, 0.92);
+  border-radius: 999px;
+  pointer-events: none;
+  opacity: var(--indicator-opacity, 0);
+  transition:
+    transform 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.25s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-nav__indicator {
+    transition: opacity 0.15s linear;
+  }
 }
 
 .site-nav nav::-webkit-scrollbar {
@@ -582,6 +613,8 @@ button {
 
 .section {
   padding: clamp(72px, 10vw, 124px) 0;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 .section__inner {

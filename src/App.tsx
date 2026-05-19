@@ -17,6 +17,7 @@ import { MapEmbed } from './components/MapEmbed';
 import { MapPickerDialog } from './components/MapPickerDialog';
 import { wedding } from './content/wedding';
 import { buildGoogleCalendarUrl } from './lib/commentPolicy';
+import { pulseSnap } from './lib/haptic';
 import type { Venue } from './lib/mapLinks';
 import { useHash } from './hooks/useHash';
 
@@ -58,6 +59,9 @@ export function App() {
     return window.matchMedia('(hover: none) and (pointer: coarse)').matches;
   });
   const autoOpenedRef = useRef(false);
+  const navRef = useRef<HTMLElement | null>(null);
+  const activeIndexRef = useRef<number>(-1);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
 
   useEffect(() => {
     const mq = window.matchMedia('(hover: none) and (pointer: coarse)');
@@ -65,6 +69,73 @@ export function App() {
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
   }, []);
+
+  useEffect(() => {
+    const ids = sections.map((s) => s.id);
+
+    function recompute() {
+      const sentinelY = window.scrollY + 100;
+      let nextIndex = -1;
+      for (let i = 0; i < ids.length; i += 1) {
+        const el = document.getElementById(ids[i]);
+        if (!el) continue;
+        const top = el.offsetTop;
+        const bottom = top + el.offsetHeight;
+        if (sentinelY >= top && sentinelY < bottom) {
+          nextIndex = i;
+          break;
+        }
+      }
+      if (nextIndex !== activeIndexRef.current) {
+        const prevIndex = activeIndexRef.current;
+        activeIndexRef.current = nextIndex;
+        setActiveSection(nextIndex >= 0 ? ids[nextIndex] : null);
+        if (prevIndex !== -1 || nextIndex !== -1) {
+          pulseSnap();
+        }
+      }
+    }
+
+    let rafId = 0;
+    const schedule = () => {
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = 0;
+        recompute();
+      });
+    };
+
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    recompute();
+
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+    };
+  }, []);
+
+  useEffect(() => {
+    function updateIndicator() {
+      const navEl = navRef.current;
+      if (!navEl) return;
+      if (!activeSection) {
+        navEl.style.setProperty('--indicator-opacity', '0');
+        return;
+      }
+      const link = navEl.querySelector<HTMLElement>(`a[data-section-id="${activeSection}"]`);
+      if (!link) return;
+      const navBox = navEl.getBoundingClientRect();
+      const linkBox = link.getBoundingClientRect();
+      navEl.style.setProperty('--indicator-x', `${linkBox.left - navBox.left}px`);
+      navEl.style.setProperty('--indicator-w', `${linkBox.width}px`);
+      navEl.style.setProperty('--indicator-opacity', '1');
+    }
+    updateIndicator();
+    window.addEventListener('resize', updateIndicator);
+    return () => window.removeEventListener('resize', updateIndicator);
+  }, [activeSection]);
 
   useEffect(() => {
     if (invitationState !== 'ready') return;
@@ -265,12 +336,18 @@ export function App() {
           <Heart size={14} aria-hidden="true" />
           {wedding.couple.bride}
         </a>
-        <nav>
+        <nav ref={navRef}>
           {sections.map((section) => (
-            <a key={section.id} href={`#${section.id}`}>
+            <a
+              key={section.id}
+              href={`#${section.id}`}
+              data-section-id={section.id}
+              aria-current={activeSection === section.id ? 'page' : undefined}
+            >
               {section.label}
             </a>
           ))}
+          <span className="site-nav__indicator" aria-hidden="true" />
         </nav>
       </header>
 
