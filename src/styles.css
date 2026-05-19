@@ -483,16 +483,6 @@ button {
   line-height: 1.55;
 }
 
-.icon-button--paper {
-  position: absolute;
-  right: 18px;
-  bottom: 18px;
-  border-color: var(--line);
-  background: rgba(37, 31, 27, 0.08);
-  color: var(--ink);
-  opacity: var(--details-opacity);
-}
-
 .intro-next {
   position: absolute;
   z-index: 8;

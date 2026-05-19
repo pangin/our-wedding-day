@@ -7,8 +7,6 @@ import {
   Heart,
   MapPin,
   MessageCircle,
-  Music,
-  Pause,
   RotateCcw,
   Share2,
 } from 'lucide-react';
@@ -53,7 +51,6 @@ export function App() {
   const introRef = useRef<HTMLElement | null>(null);
   const [invitationState, setInvitationState] = useState<InvitationState>('ready');
   const [introProgress, setIntroProgress] = useState(0);
-  const [isMusicOn, setIsMusicOn] = useState(false);
   const [copyStatus, setCopyStatus] = useState('');
   const [isMapPickerOpen, setIsMapPickerOpen] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(() => {
@@ -402,14 +399,6 @@ export function App() {
                     <dd>{wedding.event.venue} · {wedding.event.hall}</dd>
                   </div>
                 </dl>
-                <button
-                  className="icon-button icon-button--paper"
-                  type="button"
-                  aria-label={isMusicOn ? '음악 끄기' : '음악 켜기'}
-                  onClick={() => setIsMusicOn((value) => !value)}
-                >
-                  {isMusicOn ? <Pause size={18} aria-hidden="true" /> : <Music size={18} aria-hidden="true" />}
-                </button>
               </div>
             </article>
           </div>
