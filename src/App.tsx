@@ -73,47 +73,42 @@ export function App() {
   useEffect(() => {
     const ids = sections.map((s) => s.id);
 
-    function recompute() {
+    function computeIndex(): number {
       // sentinel: viewport-relative. mobile scroll-padding-top(116px) 보다 살짝 아래로 둬야
       // anchor 스크롤 직후 섹션 top(~116)이 sentinel 위에 위치한 것으로 판정됨.
       const sentinel = 140;
-      let nextIndex = -1;
       for (let i = 0; i < ids.length; i += 1) {
         const el = document.getElementById(ids[i]);
         if (!el) continue;
         const rect = el.getBoundingClientRect();
         if (rect.top <= sentinel && rect.bottom > sentinel) {
-          nextIndex = i;
-          break;
+          return i;
         }
       }
-      if (nextIndex !== activeIndexRef.current) {
+      return -1;
+    }
+
+    function onScroll() {
+      const newIndex = computeIndex();
+      if (newIndex !== activeIndexRef.current) {
         const prevIndex = activeIndexRef.current;
-        activeIndexRef.current = nextIndex;
-        setActiveSection(nextIndex >= 0 ? ids[nextIndex] : null);
-        if (prevIndex !== -1 || nextIndex !== -1) {
+        activeIndexRef.current = newIndex;
+        setActiveSection(newIndex >= 0 ? ids[newIndex] : null);
+        // 햅틱은 user gesture context 유지를 위해 scroll 이벤트 핸들러에서 동기 호출.
+        // rAF 콜백 안에서는 iOS Safari 가 user activation 으로 인정하지 않아 Taptic 발화 실패.
+        if (prevIndex !== -1 || newIndex !== -1) {
           pulseSnap();
         }
       }
     }
 
-    let rafId = 0;
-    const schedule = () => {
-      if (rafId) return;
-      rafId = requestAnimationFrame(() => {
-        rafId = 0;
-        recompute();
-      });
-    };
-
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
-    recompute();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    onScroll();
 
     return () => {
-      if (rafId) cancelAnimationFrame(rafId);
-      window.removeEventListener('scroll', schedule);
-      window.removeEventListener('resize', schedule);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
     };
   }, []);
 
@@ -146,15 +141,42 @@ export function App() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     const SNAP_IDS = ['gallery', 'venue', 'account', 'guestbook', 'share'];
-    const SNAP_THRESHOLD = 110; // px — 경계로부터 이 거리 이내에서 멈추면 자석 발동
-    const SCROLL_END_MS = 180; // 사용자 스크롤이 이만큼 멈춰 있어야 평가
-    const PROGRAMMATIC_GRACE_MS = 1100; // 우리가 발생시킨 smooth scroll 무시 시간
+    const SNAP_THRESHOLD = 160; // px — 경계로부터 이 거리 이내에서 멈추면 자석 발동
+    const SCROLL_END_MS = 140; // 사용자 스크롤이 이만큼 멈춰 있어야 평가 (반응성 ↑)
+    const PROGRAMMATIC_GRACE_MS = 900; // 우리가 발생시킨 snap 애니메이션 무시 시간
 
     let scrollEndTimer = 0;
     let programmaticUntil = 0;
+    let snapRafId = 0;
 
     function navOffset(): number {
       return window.innerWidth <= 920 ? 116 : 76;
+    }
+
+    function easeOutQuart(t: number): number {
+      return 1 - Math.pow(1 - t, 4);
+    }
+
+    function animateSnap(targetY: number) {
+      const startY = window.scrollY;
+      const distance = targetY - startY;
+      if (Math.abs(distance) < 1) return;
+      // 220–360ms 범위에서 거리에 비례. 짧은 끌어당김도 분명히 인지되되 너무 느리지 않게.
+      const duration = Math.min(360, Math.max(220, 180 + Math.abs(distance) * 0.45));
+      const startTime = performance.now();
+      programmaticUntil = Date.now() + duration + PROGRAMMATIC_GRACE_MS;
+      if (snapRafId) cancelAnimationFrame(snapRafId);
+      const step = (now: number) => {
+        const elapsed = now - startTime;
+        const t = Math.min(1, elapsed / duration);
+        window.scrollTo(0, startY + distance * easeOutQuart(t));
+        if (t < 1) {
+          snapRafId = requestAnimationFrame(step);
+        } else {
+          snapRafId = 0;
+        }
+      };
+      snapRafId = requestAnimationFrame(step);
     }
 
     function evaluateSnap() {
@@ -178,8 +200,7 @@ export function App() {
       }
 
       if (bestTarget !== null) {
-        programmaticUntil = Date.now() + PROGRAMMATIC_GRACE_MS;
-        window.scrollTo({ top: bestTarget, behavior: 'smooth' });
+        animateSnap(bestTarget);
       }
     }
 
@@ -202,6 +223,7 @@ export function App() {
 
     return () => {
       if (scrollEndTimer) window.clearTimeout(scrollEndTimer);
+      if (snapRafId) cancelAnimationFrame(snapRafId);
       window.removeEventListener('scroll', onScroll);
       document.removeEventListener('click', onAnchorClick, true);
     };
