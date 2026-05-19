@@ -39,13 +39,6 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 76px;
-  scroll-snap-type: y proximity;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-snap-type: none;
-  }
 }
 
 @media (max-width: 920px) {
@@ -613,7 +606,6 @@ button {
 
 .section {
   padding: clamp(72px, 10vw, 124px) 0;
-  scroll-snap-align: start;
 }
 
 .section__inner {

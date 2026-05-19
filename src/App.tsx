@@ -138,6 +138,75 @@ export function App() {
     return () => window.removeEventListener('resize', updateIndicator);
   }, [activeSection]);
 
+  // JS 기반 boundary snap — 사용자 스크롤이 멈춘 직후에만 작동.
+  // CSS scroll-snap 과 달리 섹션 내부 관성을 죽이지 않고, anchor 네비게이션도 방해하지 않음.
+  useEffect(() => {
+    if (invitationState !== 'opened') return;
+    if (typeof window === 'undefined') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const SNAP_IDS = ['gallery', 'venue', 'account', 'guestbook', 'share'];
+    const SNAP_THRESHOLD = 110; // px — 경계로부터 이 거리 이내에서 멈추면 자석 발동
+    const SCROLL_END_MS = 180; // 사용자 스크롤이 이만큼 멈춰 있어야 평가
+    const PROGRAMMATIC_GRACE_MS = 1100; // 우리가 발생시킨 smooth scroll 무시 시간
+
+    let scrollEndTimer = 0;
+    let programmaticUntil = 0;
+
+    function navOffset(): number {
+      return window.innerWidth <= 920 ? 116 : 76;
+    }
+
+    function evaluateSnap() {
+      if (Date.now() < programmaticUntil) return;
+      const scrollY = window.scrollY;
+      const offset = navOffset();
+      let bestTarget: number | null = null;
+      let bestDistance = SNAP_THRESHOLD;
+
+      for (const id of SNAP_IDS) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const rect = el.getBoundingClientRect();
+        const sectionTopY = rect.top + scrollY;
+        const snapY = Math.max(0, sectionTopY - offset);
+        const distance = Math.abs(scrollY - snapY);
+        if (distance > 1 && distance < bestDistance) {
+          bestDistance = distance;
+          bestTarget = snapY;
+        }
+      }
+
+      if (bestTarget !== null) {
+        programmaticUntil = Date.now() + PROGRAMMATIC_GRACE_MS;
+        window.scrollTo({ top: bestTarget, behavior: 'smooth' });
+      }
+    }
+
+    function onScroll() {
+      if (scrollEndTimer) window.clearTimeout(scrollEndTimer);
+      scrollEndTimer = window.setTimeout(evaluateSnap, SCROLL_END_MS);
+    }
+
+    // 사용자가 anchor (nav 링크 등) 로 점프할 때 programmatic flag 자동 셋업
+    function onAnchorClick(event: MouseEvent) {
+      const target = event.target as HTMLElement | null;
+      if (!target) return;
+      const anchor = target.closest('a[href^="#"]');
+      if (!anchor) return;
+      programmaticUntil = Date.now() + PROGRAMMATIC_GRACE_MS;
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    document.addEventListener('click', onAnchorClick, true);
+
+    return () => {
+      if (scrollEndTimer) window.clearTimeout(scrollEndTimer);
+      window.removeEventListener('scroll', onScroll);
+      document.removeEventListener('click', onAnchorClick, true);
+    };
+  }, [invitationState]);
+
   useEffect(() => {
     if (invitationState !== 'ready') return;
     if (autoOpenedRef.current) return;
