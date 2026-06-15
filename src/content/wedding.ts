@@ -61,8 +61,8 @@ export const wedding = {
     phone: '02-2130-2300',
     transit: '서울역 3번 출구 도보 7분 · 시청역 9번 출구 도보 4분',
     parking: '퍼시픽타워 지하주차장 3시간 무료주차 가능',
-    lat: 37.5602,
-    lng: 126.9737,
+    lat: 37.5613584,
+    lng: 126.9730165,
   },
   copy: {
     opening:

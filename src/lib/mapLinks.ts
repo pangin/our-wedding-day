@@ -56,9 +56,13 @@ function buildUrls(provider: MapProvider, venue: Venue): MapUrls {
       return { web, iosScheme, androidIntent };
     }
     case 'tmap': {
-      const web = `https://map.naver.com/p/search/${fullQuery}`;
-      const iosScheme = `tmap://search?name=${placeName}`;
-      const androidIntent = `intent://search?name=${placeName}#Intent;scheme=tmap;package=com.skt.tmap.ku;S.browser_fallback_url=${enc(web)};end`;
+      // goalx = longitude, goaly = latitude (SK Telecom's URL-scheme convention).
+      // Lowercase goalname/goalx/goaly works on both iOS and Android per community testing.
+      const route = `route?goalname=${placeName}&goalx=${lng}&goaly=${lat}`;
+      // Fallback when TMAP isn't installed: Kakao Map coordinate-pin link works in any mobile browser.
+      const web = `https://map.kakao.com/link/map/${placeName},${lat},${lng}`;
+      const iosScheme = `tmap://${route}`;
+      const androidIntent = `intent://${route}#Intent;scheme=tmap;package=com.skt.tmap.ku;S.browser_fallback_url=${enc(web)};end`;
       return { web, iosScheme, androidIntent };
     }
     case 'google': {
