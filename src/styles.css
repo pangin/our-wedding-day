@@ -288,6 +288,37 @@ button {
   backdrop-filter: blur(12px);
 }
 
+.opening-copy .opening-message {
+  display: grid;
+  gap: 4px;
+  margin: 4px 0 8px;
+  max-width: min(520px, calc(100% - 32px));
+  padding: 0;
+  color: rgba(255, 250, 242, 0.92);
+  font-size: 1.02rem;
+  font-weight: 400;
+  line-height: 1.7;
+  letter-spacing: 0;
+  text-transform: none;
+  background: none;
+  border: 0;
+  backdrop-filter: none;
+  min-height: 0;
+  border-radius: 0;
+}
+
+.opening-copy .opening-message__line {
+  display: block;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  backdrop-filter: none;
+  color: inherit;
+  font-size: inherit;
+  letter-spacing: 0.01em;
+}
+
 .opening-copy .opening-gesture {
   margin-top: 4px;
   width: 30px;

@@ -301,6 +301,12 @@ export function App() {
   }, [eventDate]);
 
   const isAdmin = hash === '#admin';
+  const isAfterWedding = useMemo(
+    () => Date.now() >= new Date(wedding.event.date).getTime(),
+    [],
+  );
+  const cover = isAfterWedding ? wedding.copy.cover.post : wedding.copy.cover.pre;
+  const coverCta = isTouchDevice ? cover.ctaTouch : cover.cta;
   const displayedProgress = invitationState === 'opened' ? 1 : introProgress;
   const invitationMotion = useMemo<MotionStyle>(() => {
     const opening = easeOutCubic(progressBetween(displayedProgress, 0, 0.36));
@@ -453,16 +459,27 @@ export function App() {
           <div className="invitation-stage">
             <img className="invitation-backdrop" src={wedding.images.hero} alt="" aria-hidden="true" />
             <div className="invitation-backdrop__shade" />
-            <div className="opening-copy" aria-hidden={invitationState === 'opened'}>
-              <p>Wedding Invitation</p>
+            <div
+              className={`opening-copy opening-copy--${isAfterWedding ? 'post' : 'pre'}`}
+              aria-hidden={invitationState === 'opened'}
+            >
+              <p>{cover.eyebrow}</p>
               <h1>
                 {wedding.couple.groom}
                 <Heart size={42} aria-hidden="true" strokeWidth={1.5} />
                 {wedding.couple.bride}
               </h1>
-              <span>
-                {isTouchDevice ? '손가락으로 밀어서 초대장을 펼쳐보세요' : '스크롤해서 초대장을 펼쳐보세요'}
-              </span>
+              {isAfterWedding ? (
+                <p className="opening-message">
+                  {wedding.copy.cover.post.message.map((line, index) => (
+                    <span key={line} className="opening-message__line">
+                      {line}
+                      {index < wedding.copy.cover.post.message.length - 1 ? <br /> : null}
+                    </span>
+                  ))}
+                </p>
+              ) : null}
+              <span>{coverCta}</span>
               <span className="opening-gesture" aria-hidden="true">
                 {isTouchDevice ? (
                   <svg viewBox="0 0 40 56" fill="none" xmlns="http://www.w3.org/2000/svg">
