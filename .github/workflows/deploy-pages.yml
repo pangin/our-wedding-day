@@ -81,6 +81,8 @@ jobs:
           VITE_AUTH_GOOGLE_ENABLED: ${{ secrets.VITE_AUTH_GOOGLE_ENABLED }}
           VITE_AUTH_NAVER_ENABLED: ${{ secrets.VITE_AUTH_NAVER_ENABLED }}
           VITE_RSVP_CLOSED: ${{ steps.rsvp.outputs.closed }}
+          # 청첩장 전체 닫기 — 'true' 면 감사 인사 한 페이지만 남긴다. 미설정/빈 값은 열림.
+          VITE_INVITATION_CLOSED: ${{ secrets.VITE_INVITATION_CLOSED }}
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

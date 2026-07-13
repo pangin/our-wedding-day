@@ -232,6 +232,83 @@ button {
     linear-gradient(180deg, rgba(24, 21, 18, 0.32), rgba(24, 21, 18, 0.78));
 }
 
+.closed-cover {
+  position: relative;
+  display: grid;
+  min-height: 100svh;
+  place-items: center;
+  overflow: hidden;
+  padding: 48px 24px;
+  background: #1d1916;
+}
+
+.closed-cover .invitation-backdrop {
+  opacity: 0.5;
+  transform: none;
+  filter: saturate(0.78) contrast(1.02);
+}
+
+.closed-cover__copy {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  max-width: min(640px, calc(100% - 24px));
+  justify-items: center;
+  gap: 14px;
+  color: #fffaf2;
+  text-align: center;
+}
+
+.closed-cover__eyebrow {
+  margin: 0;
+  color: #dfb56a;
+  font-size: 0.86rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.closed-cover__names {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.36em;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 3.6rem;
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.closed-cover__names svg {
+  color: rgba(255, 250, 242, 0.82);
+}
+
+.closed-cover__date {
+  margin: 2px 0 6px;
+  color: rgba(255, 250, 242, 0.62);
+  font-size: 0.92rem;
+  letter-spacing: 0.02em;
+}
+
+.closed-cover__message {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  color: rgba(255, 250, 242, 0.9);
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.closed-cover__line {
+  display: block;
+}
+
+@media (min-width: 700px) {
+  .closed-cover__names {
+    font-size: 4.4rem;
+  }
+}
+
 .opening-copy {
   position: absolute;
   z-index: 2;

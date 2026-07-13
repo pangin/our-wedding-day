@@ -16,6 +16,7 @@ import { Guestbook } from './components/Guestbook';
 import { MapEmbed } from './components/MapEmbed';
 import { MapPickerDialog } from './components/MapPickerDialog';
 import { wedding } from './content/wedding';
+import { INVITATION_CLOSED } from './lib/siteConfig';
 import { buildGoogleCalendarUrl } from './lib/commentPolicy';
 import { pulseSnap } from './lib/haptic';
 import type { Venue } from './lib/mapLinks';
@@ -420,6 +421,34 @@ export function App() {
 
     setInvitationState('replaying');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  if (INVITATION_CLOSED) {
+    return (
+      <>
+        <main className="closed-cover">
+          <img className="invitation-backdrop" src={wedding.images.hero} alt="" aria-hidden="true" />
+          <div className="invitation-backdrop__shade" />
+          <div className="closed-cover__copy">
+            <p className="closed-cover__eyebrow">{wedding.copy.cover.post.eyebrow}</p>
+            <h1 className="closed-cover__names">
+              {wedding.couple.groom}
+              <Heart size={40} aria-hidden="true" strokeWidth={1.5} />
+              {wedding.couple.bride}
+            </h1>
+            <p className="closed-cover__date">{wedding.event.displayDate}</p>
+            <p className="closed-cover__message">
+              {wedding.copy.cover.post.message.map((line) => (
+                <span key={line} className="closed-cover__line">
+                  {line}
+                </span>
+              ))}
+            </p>
+          </div>
+        </main>
+        {isAdmin ? <AdminPanel onClose={() => (window.location.hash = '')} /> : null}
+      </>
+    );
   }
 
   return (
